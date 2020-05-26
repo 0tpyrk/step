@@ -4,6 +4,42 @@
   width: 650px;
 }
 
-#greeting-container {
+#movie-container {
   margin-top: 20px;
+}
+
+/* unordered list */
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0;
+}
+
+/* align navbar elements to the left */
+li {
+    float: left;
+}
+
+/* text settings */
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+/* show which navbar element we are hovering over by highlighting it */
+li a:hover {
+    background-color: #111;
+}
+
+/* change background of active navbar element */
+.active {
+    background-color: #4CAF50;
 }
