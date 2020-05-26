@@ -26,3 +26,18 @@ function addRandomGreeting() {
   const greetingContainer = document.getElementById('greeting-container');
   greetingContainer.innerText = greeting;
 }
+
+/**
+ * Adds a random movie recommendation to the page.
+ */
+function addRandomMovie() {
+  const movies =
+      ['Searching (2018)', 'The Avengers (2012)', 'Spider-Man: Homecoming (2017)', 'Your Name (2016)', 'Knives Out (2019)'];
+
+  // Pick a random greeting.
+  const movie = movies[Math.floor(Math.random() * movies.length)];
+
+  // Add it to the page.
+  const movieContainer = document.getElementById('movie-container');
+  movieContainer.innerText = movie;
+}
