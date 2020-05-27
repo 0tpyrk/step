@@ -14,6 +14,7 @@
 
 /* unordered list */
 ul {
+    width: 100%;
   background-color: #333;
   list-style-type: none;
   margin: 0;
@@ -58,12 +59,12 @@ li a:hover {
 }
 
 #my-photos {
-  background-color: rgb(250, 226, 250);
+  background-color: #ffb7b2;
   padding: 10px;
 }
 
 #other-photos {
-  background-color: rgb(228, 187, 255);
+  background-color: #ff9aa2;
   padding: 10px;
 }
 
