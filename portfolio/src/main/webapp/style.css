@@ -48,3 +48,23 @@ li a:hover {
   background-color: #c9ffdf;
   color: black;
 }
+
+.image-thumbnails {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.image-thumbnails img {
+  margin: 10px;
+  max-height: 200px;
+  /*max-width: 200px;*/
+}
+
+.image-thumbnails img:hover {
+  border: thick solid black;
+}
+
+#random-image-container img {
+  margin-top: 20px;
+}
