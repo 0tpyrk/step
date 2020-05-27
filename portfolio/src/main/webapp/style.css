@@ -77,3 +77,14 @@ li a:hover {
   border: solid black;
   border-width: 2px;
 }
+
+#about-me {
+  background-color: #c7ceea;
+  padding: 10px;
+}
+
+#about-me img {
+  margin: 10px;
+  max-width: 660px;
+}
+
