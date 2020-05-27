@@ -5,7 +5,7 @@
 #content {
   margin-left: auto;
   margin-right: auto;
-  width: 650px;
+  width: 700px;
 }
 
 #movie-container {
@@ -41,6 +41,7 @@ li a {
 /* show which navbar element we are hovering over by highlighting it */
 li a:hover {
   background-color: #111;
+  color: white;
 }
 
 /* change background of active navbar element */
@@ -53,18 +54,25 @@ li a:hover {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  text-align: center;
+}
+
+#my-photos {
+  background-color: rgb(250, 226, 250);
+  padding: 10px;
+}
+
+#other-photos {
+  background-color: rgb(228, 187, 255);
+  padding: 10px;
 }
 
 .image-thumbnails img {
   margin: 10px;
   max-height: 200px;
-  /*max-width: 200px;*/
 }
 
 .image-thumbnails img:hover {
-  border: thick solid black;
-}
-
-#random-image-container img {
-  margin-top: 20px;
+  border: solid black;
+  border-width: 2px;
 }
