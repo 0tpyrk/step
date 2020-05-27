@@ -1,50 +1,50 @@
 #page-title {
-    text-align: center
+  text-align: center
 }
 
 #content {
-    margin-left: auto;
-    margin-right: auto;
-    width: 650px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 650px;
 }
 
 #movie-container {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 /* unordered list */
 ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 2px;
-    overflow: hidden;
-    background-color: #333;
-    position: -webkit-sticky; /* Safari */
-    position: sticky;
-    top: 0;
+  background-color: #333;
+  list-style-type: none;
+  margin: 0;
+  overflow: hidden;
+  padding: 2px;
+  position: sticky;
+  position: -webkit-sticky; /* for compatability with Safari */
+  top: 0;
 }
 
 /* align navbar elements to the left */
 li {
-    float: left;
+  float: left;
 }
 
 /* text settings */
 li a {
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
+  color: white;
+  display: block;
+  padding: 14px 16px;
+  text-align: center;
+  text-decoration: none;
 }
 
 /* show which navbar element we are hovering over by highlighting it */
 li a:hover {
-    background-color: #111;
+  background-color: #111;
 }
 
 /* change background of active navbar element */
 .active {
-    color: black;
-    background-color: #c9ffdf;
+  background-color: #c9ffdf;
+  color: black;
 }
