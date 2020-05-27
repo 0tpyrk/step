@@ -32,7 +32,9 @@ function addRandomGreeting() {
  */
 function addRandomMovie() {
   const movies =
-      ['Searching (2018)', 'The Avengers (2012)', 'Spider-Man: Homecoming (2017)', 'Your Name (2016)', 'Knives Out (2019)'];
+      ['Searching (2018)', 'The Avengers (2012)',
+      'Spider-Man: Homecoming (2017)', 'Your Name (2016)',
+      'Knives Out (2019)'];
 
   // Pick a random movie.
   const movie = movies[Math.floor(Math.random() * movies.length)];
