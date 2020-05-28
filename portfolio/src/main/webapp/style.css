@@ -1,16 +1,12 @@
+/* potentially change padding above titles to only be 10px on every page */
+
 /* ALL PAGES */
 body {
   margin: 0;
 } 
 
-#page-title {
+#site-title {
   text-align: center
-}
-
-#content {
-  margin-left: auto;
-  margin-right: auto;
-  width: 700px;
 }
 
 /* unordered list */
@@ -52,6 +48,18 @@ li a:hover {
   color: black;
 }
 
+.page-title {
+  padding: 10px;
+  padding-left: 20px;
+  padding-top: 20px;
+}
+
+#content {
+  margin-left: auto;
+  margin-right: auto;
+  width: 700px;
+}
+
 
 /* INDEX */
 #movie-container {
@@ -64,6 +72,10 @@ li a:hover {
   flex-wrap: wrap;
   justify-content: center;
   text-align: center;
+}
+
+#gallery {
+  background-color: #ffdbd9;
 }
 
 #my-photos {
@@ -89,12 +101,16 @@ li a:hover {
 
 /* ABOUT ME */
 #about-me {
+  background-color: #e0e7ff;
+}
+
+#about-me-info {
   background-color: #c7ceea;
   height: 900px;
   padding: 20px;
 }
 
-#about-me img {
+#about-me-info img {
   margin: 10px;
   max-width: 640px;
 }
@@ -104,11 +120,16 @@ li a:hover {
 }
 
 #logos img {
-  max-width: 32px;
+  max-height: 32px;
   padding: 10px;
 }
 
 /* PROJECTS */
+
+#projects {
+  background-color: #defff3;
+}
+
 .row .column {
   box-sizing: border-box;
 }
@@ -121,7 +142,7 @@ li a:hover {
 }
 
 .column img {
-  max-width: 100%;
+  max-width: 90%;
 }
 
 .column.left {
