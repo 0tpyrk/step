@@ -15,7 +15,6 @@ body {
 
 /* unordered list */
 ul {
-    width: 100%;
   background-color: #333;
   list-style-type: none;
   margin: 0;
@@ -24,6 +23,7 @@ ul {
   position: sticky;
   position: -webkit-sticky; /* for compatability with Safari */
   top: 0;
+  width: 100%;
 }
 
 /* align navbar elements to the left */
@@ -90,18 +90,18 @@ li a:hover {
 /* ABOUT ME */
 #about-me {
   background-color: #c7ceea;
-  height: 100%;
-  padding: 10px;
+  height: 900px;
+  padding: 20px;
 }
 
 #about-me img {
   margin: 10px;
-  max-width: 660px;
+  max-width: 640px;
 }
 
 
 /* PROJECTS */
-* {
+.row .column {
   box-sizing: border-box;
 }
 
