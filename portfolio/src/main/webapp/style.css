@@ -99,6 +99,14 @@ li a:hover {
   max-width: 640px;
 }
 
+#logos {
+
+}
+
+#logos img {
+  max-width: 32px;
+  padding: 10px;
+}
 
 /* PROJECTS */
 .row .column {
