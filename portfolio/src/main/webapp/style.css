@@ -62,6 +62,16 @@ li a:hover {
 
 
 /* INDEX */
+#index {
+  background-color: #ffe5d4;
+}
+
+#index-info {
+  background-color: #ffdac1;
+  height: 900px;
+  padding: 20px;
+}
+
 #movie-container {
   margin-top: 20px;
 }
