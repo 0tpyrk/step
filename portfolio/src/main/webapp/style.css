@@ -1,3 +1,7 @@
+body {
+  margin: 0;
+} 
+
 #page-title {
   text-align: center
 }
@@ -80,6 +84,7 @@ li a:hover {
 
 #about-me {
   background-color: #c7ceea;
+  height: 100%;
   padding: 10px;
 }
 
@@ -88,3 +93,39 @@ li a:hover {
   max-width: 660px;
 }
 
+* {
+  box-sizing: border-box;
+}
+
+.column {
+  float: left;
+  height: 300px; /* temp? */
+  padding: 10px;
+  width: 33.33%;
+}
+
+#proj-column-left {
+  background-color: #c5ffdd;
+}
+
+#proj-column-middle {
+  background-color: #f1ffda;
+}
+
+#proj-column-right {
+  background-color: #c7ffeb;
+}
+
+/* after becoming rows */
+.row:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+/* if screen is < 800px, stack as rows */
+@media screen and (max-width: 800px) {
+  .column {
+    width: 100%;
+  }
+}
