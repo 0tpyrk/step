@@ -1,15 +1,12 @@
-#page-title {
+/* potentially change padding above titles to only be 10px on every page */
+
+/* ALL PAGES */
+body {
+  margin: 0;
+} 
+
+#site-title {
   text-align: center
-}
-
-#content {
-  margin-left: auto;
-  margin-right: auto;
-  width: 650px;
-}
-
-#movie-container {
-  margin-top: 20px;
 }
 
 /* unordered list */
@@ -22,6 +19,7 @@ ul {
   position: sticky;
   position: -webkit-sticky; /* for compatability with Safari */
   top: 0;
+  width: 100%;
 }
 
 /* align navbar elements to the left */
@@ -41,10 +39,134 @@ li a {
 /* show which navbar element we are hovering over by highlighting it */
 li a:hover {
   background-color: #111;
+  color: white;
 }
 
 /* change background of active navbar element */
 .active {
   background-color: #c9ffdf;
   color: black;
+}
+
+.page-title {
+  padding: 10px;
+  padding-left: 20px;
+  padding-top: 20px;
+}
+
+#content {
+  margin-left: auto;
+  margin-right: auto;
+  width: 700px;
+}
+
+
+/* INDEX */
+#movie-container {
+  margin-top: 20px;
+}
+
+/* GALLERY */
+.image-thumbnails {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
+}
+
+#gallery {
+  background-color: #ffdbd9;
+}
+
+#my-photos {
+  background-color: #ffb7b2;
+  padding: 10px;
+}
+
+#other-photos {
+  background-color: #ff9aa2;
+  padding: 10px;
+}
+
+.image-thumbnails img {
+  margin: 10px;
+  max-height: 200px;
+}
+
+.image-thumbnails img:hover {
+  border: solid black;
+  border-width: 2px;
+}
+
+
+/* ABOUT ME */
+#about-me {
+  background-color: #e0e7ff;
+}
+
+#about-me-info {
+  background-color: #c7ceea;
+  height: 900px;
+  padding: 20px;
+}
+
+#about-me-info img {
+  margin: 10px;
+  max-width: 640px;
+}
+
+#logos {
+
+}
+
+#logos img {
+  max-height: 32px;
+  padding: 10px;
+}
+
+/* PROJECTS */
+
+#projects {
+  background-color: #defff3;
+}
+
+.row .column {
+  box-sizing: border-box;
+}
+
+.column {
+  float: left;
+  /* height: 300px;  temp? */
+  padding: 10px;
+  width: 33.33%;
+}
+
+.column img {
+  max-width: 90%;
+}
+
+.column.left {
+  background-color: #c5ffdd;
+}
+
+.column.middle {
+  background-color: #f1ffda;
+}
+
+.column.right {
+  background-color: #c7ffeb;
+}
+
+/* after becoming rows */
+.row:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+/* if screen is < 800px, stack as rows */
+@media screen and (max-width: 800px) {
+  .column {
+    width: 100%;
+  }
 }
