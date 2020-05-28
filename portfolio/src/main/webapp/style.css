@@ -99,20 +99,24 @@ li a:hover {
 
 .column {
   float: left;
-  height: 300px; /* temp? */
+  /* height: 300px;  temp? */
   padding: 10px;
   width: 33.33%;
 }
 
-#proj-column-left {
+.column img {
+  max-width: 100%;
+}
+
+.column.left {
   background-color: #c5ffdd;
 }
 
-#proj-column-middle {
+.column.middle {
   background-color: #f1ffda;
 }
 
-#proj-column-right {
+.column.right {
   background-color: #c7ffeb;
 }
 
