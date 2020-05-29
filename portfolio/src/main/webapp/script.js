@@ -46,3 +46,83 @@ function addRandomMovie() {
   const movieContainer = document.getElementById('movie-container');
   movieContainer.innerText = movie;
 }
+
+var form = document.querySelector("form");
+
+/* form.addEventListener("submit", function(event) {
+  var data = new FormData(form);
+  var output = "";
+  for (const entry of data) {
+    output = output + entry[0] + "=" + entry[1] + "\r";
+  };
+  log.innerText = output;
+  event.preventDefault();
+}, false); */
+
+
+function setCookie(cname, cvalue) {
+  document.cookie = cname + "=" + cvalue; //+ ";path=/";
+}
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+function checkCookie() {
+  var house = toStringHouse(getCookie("house"));
+  console.log("House: " + house);
+  var elements = document.getElementsByClassName("house-navbar");
+  elements[0].id = house.toLowerCase();
+  elements[0].innerText = house;
+}
+
+function toStringHouse(tag) {
+  output = "";
+  if (tag != "") {
+    switch(tag) {
+      case 'g':
+        output = "Gryffindor"
+        break;
+      case 'h':
+        output = "Hufflepuff"
+        break;
+      case 'r':
+        output = "Ravenclaw"
+        break;
+      case 's':
+        output = "Slytherin"
+        break;
+    }
+  }
+  return output;
+}
+
+form.addEventListener("submit", function(event) {
+  var data = new FormData(form);
+  var output = "";
+  for (const entry of data) {
+    output = output + entry[0] + "=" + entry[1] + "\r";
+    setCookie("house", entry[1]);
+    const houseContainer = document.getElementById('house-container');
+    houseContainer.innerText = "You are a " + toStringHouse(entry[1]) + "!";
+  };
+  console.log(output)
+  checkCookie();
+  event.preventDefault();
+}, false);
+
+/*function loadImage() {
+  alert("Image is loaded");
+}*/

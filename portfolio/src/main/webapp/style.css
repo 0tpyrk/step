@@ -27,6 +27,10 @@ li {
   float: left;
 }
 
+.r {
+  float: right;  
+}
+
 /* text settings */
 li a {
   color: white;
@@ -46,6 +50,26 @@ li a:hover {
 .active {
   background-color: #fffef2;
   color: black;
+}
+
+#gryffindor {
+  background-color: #900d09;
+  color: #fed000;
+}
+
+#hufflepuff {
+  background-color: #ffe338;
+  color: black;
+}
+
+#ravenclaw {
+  background-color: #187bcd;
+  color: #dfa44d;
+}
+
+#slytherin {
+  background-color: #21945c;
+  color: #bec2cb;
 }
 
 .page-title {
