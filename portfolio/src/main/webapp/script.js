@@ -47,29 +47,19 @@ function addRandomMovie() {
   movieContainer.innerText = movie;
 }
 
-var form = document.querySelector("form");
-
-/* form.addEventListener("submit", function(event) {
-  var data = new FormData(form);
-  var output = "";
-  for (const entry of data) {
-    output = output + entry[0] + "=" + entry[1] + "\r";
-  };
-  log.innerText = output;
-  event.preventDefault();
-}, false); */
-
-
 function setCookie(cname, cvalue) {
-  document.cookie = cname + "=" + cvalue; //+ ";path=/";
+  document.cookie = cname + "=" + cvalue + "; ";
 }
 
+/**
+ * Gets value of the cookie cname
+ */
 function getCookie(cname) {
   var name = cname + "=";
   var decodedCookie = decodeURIComponent(document.cookie);
-  var ca = decodedCookie.split(';');
-  for(var i = 0; i <ca.length; i++) {
-    var c = ca[i];
+  var cArr = decodedCookie.split(';');
+  for(var i = 0; i < cArr.length; i++) {
+    var c = cArr[i];
     while (c.charAt(0) == ' ') {
       c = c.substring(1);
     }
@@ -80,49 +70,60 @@ function getCookie(cname) {
   return "";
 }
 
+/**
+ * Updates navbar with house based off cookie
+ */
 function checkCookie() {
   var house = toStringHouse(getCookie("house"));
-  console.log("House: " + house);
   var elements = document.getElementsByClassName("house-navbar");
   elements[0].id = house.toLowerCase();
   elements[0].innerText = house;
 }
 
+/**
+ * Turns letter tag into corresponding house name
+ */
 function toStringHouse(tag) {
   output = "";
   if (tag != "") {
     switch(tag) {
       case 'g':
-        output = "Gryffindor"
+        output = "Gryffindor";
         break;
       case 'h':
-        output = "Hufflepuff"
+        output = "Hufflepuff";
         break;
       case 'r':
-        output = "Ravenclaw"
+        output = "Ravenclaw";
         break;
       case 's':
-        output = "Slytherin"
+        output = "Slytherin";
         break;
     }
   }
   return output;
 }
 
+var form = document.querySelector("form");
+
+/**
+ * Triggered when user submits house quiz
+ */
 form.addEventListener("submit", function(event) {
   var data = new FormData(form);
   var output = "";
   for (const entry of data) {
-    output = output + entry[0] + "=" + entry[1] + "\r";
-    setCookie("house", entry[1]);
-    const houseContainer = document.getElementById('house-container');
-    houseContainer.innerText = "You are a " + toStringHouse(entry[1]) + "!";
+    output = entry[1];
   };
-  console.log(output)
+
+  setCookie("house", output);
+
+  // print message
+  const houseContainer = document.getElementById('house-container');
+  houseContainer.innerText = "You are a " + toStringHouse(output) + "!";
+  
+  // update navbar
   checkCookie();
+  
   event.preventDefault();
 }, false);
-
-/*function loadImage() {
-  alert("Image is loaded");
-}*/

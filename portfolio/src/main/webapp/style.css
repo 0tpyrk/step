@@ -27,6 +27,7 @@ li {
   float: left;
 }
 
+/* for navbar elements that should be on the right */
 .r {
   float: right;  
 }
