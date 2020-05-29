@@ -34,7 +34,10 @@ function addRandomMovie() {
   const movies =
       ['Searching (2018)', 'The Avengers (2012)',
       'Spider-Man: Homecoming (2017)', 'Your Name (2016)',
-      'Knives Out (2019)'];
+      'Knives Out (2019)', 'La La Land (2016)', 'Ant-Man (2015)',
+      'Kingsman: The Secret Service (2014)', 'Iron Man (2008)',
+      'Coco (2017)', 'Ratatouille (2007)', 'Get Out (2017)',
+      'Jojo Rabbit (2019)', 'The Big Sick (2017)'];
 
   // Pick a random movie.
   const movie = movies[Math.floor(Math.random() * movies.length)];
