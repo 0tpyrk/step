@@ -27,6 +27,11 @@ li {
   float: left;
 }
 
+/* for navbar elements that should be on the right */
+.r {
+  float: right;  
+}
+
 /* text settings */
 li a {
   color: white;
@@ -44,8 +49,28 @@ li a:hover {
 
 /* change background of active navbar element */
 .active {
-  background-color: #c9ffdf;
+  background-color: #fffef2;
   color: black;
+}
+
+#gryffindor {
+  background-color: #900d09;
+  color: #fed000;
+}
+
+#hufflepuff {
+  background-color: #ffe338;
+  color: black;
+}
+
+#ravenclaw {
+  background-color: #187bcd;
+  color: #dfa44d;
+}
+
+#slytherin {
+  background-color: #21945c;
+  color: #bec2cb;
 }
 
 .page-title {
@@ -62,6 +87,16 @@ li a:hover {
 
 
 /* INDEX */
+#index {
+  background-color: #ffe5d4;
+}
+
+#index-info {
+  background-color: #ffdac1;
+  height: 900px;
+  padding: 20px;
+}
+
 #movie-container {
   margin-top: 20px;
 }
@@ -115,17 +150,13 @@ li a:hover {
   max-width: 640px;
 }
 
-#logos {
-
-}
-
 #logos img {
   max-height: 32px;
   padding: 10px;
 }
 
-/* PROJECTS */
 
+/* PROJECTS */
 #projects {
   background-color: #defff3;
 }
@@ -136,13 +167,9 @@ li a:hover {
 
 .column {
   float: left;
-  /* height: 300px;  temp? */
+  height: 600px;
   padding: 10px;
   width: 33.33%;
-}
-
-.column img {
-  max-width: 90%;
 }
 
 .column.left {
@@ -157,6 +184,12 @@ li a:hover {
   background-color: #c7ffeb;
 }
 
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* after becoming rows */
 .row:after {
   clear: both;
@@ -164,9 +197,10 @@ li a:hover {
   display: table;
 }
 
-/* if screen is < 800px, stack as rows */
-@media screen and (max-width: 800px) {
+/* if screen is < 945px, stack as rows */
+@media screen and (max-width: 945px) {
   .column {
     width: 100%;
+    height: 400px;
   }
 }

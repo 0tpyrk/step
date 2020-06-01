@@ -4,17 +4,20 @@
   <head>
     <title>Projects</title>
     <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
   </head>
-  <body>
-    <h1 id="site-title">My Portfolio</h1>
+  <body onload="checkCookie()">
+    <h1 id="site-title">William Lew</h1>
     <!-- navbar -->
     <ul>
       <li><a href="index.html">Home</a></li>
       <li><a class="active" href="projects.html">Projects</a></li>
       <li><a href="gallery.html">Gallery</a></li>
-      <li><a href="blog.html">Blog</a></li>
+      <!-- <li><a href="blog.html">Blog</a></li> -->
       <li><a href="aboutme.html">About Me</a></li>
+      <li class="r"><a class="house-navbar"></a></li>
     </ul>
+
     <div id="projects" class="page-title">
       <h1>Projects</h1>
     </div>
@@ -27,9 +30,10 @@
             with their friends. It works by creating and internally maintaining 
             groups of users that have certain games, then when called upon, 
             determining which games the users have.</p>
+        <br>
         <img 
           src="https://discord.com/assets/e7a3b51fdac2aa5ec71975d257d5c405.png" 
-          alt="Discord Logo">
+          alt="Discord Logo" width="75%" class="center">
       </div>
 
       <div class="column middle">
@@ -39,7 +43,8 @@
         <p> Written in RenPy, a derivative of Python created for visual novels, 
             this mod adds another 2 hours of original story to the base 
             game.</p>
-        <img src="images/logos/ddlc.png" alt="Mod Logo" width="50%">
+        <br>                                                      
+        <img src="images/logos/ddlc.png" alt="Mod Logo" height="50%" class="center">
       </div>
 
       <div class="column right">
@@ -50,7 +55,5 @@
         <!-- TODO add picture -->
       </div>
     </div>
-
-
   </body>
 </html>

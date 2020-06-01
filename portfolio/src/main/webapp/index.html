@@ -2,27 +2,55 @@
 <meta charset="utf-8">
 <html>
   <head>
-    <title>My Portfolio</title>
+    <title>Home</title>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
   </head>
-  <body>
-    <h1 id="site-title">My Portfolio</h1>
+  <body onload="checkCookie()">
+    <h1 id="site-title">William Lew</h1>
     <!-- navbar -->
     <ul>
       <li><a class="active" href="index.html">Home</a></li>
       <li><a href="projects.html">Projects</a></li>
       <li><a href="gallery.html">Gallery</a></li>
-      <li><a href="blog.html">Blog</a></li>
+      <!-- <li><a href="blog.html">Blog</a></li> -->
       <li><a href="aboutme.html">About Me</a></li>
+      <li class="r"><a class="house-navbar"></a></li>
     </ul>
 
     <div id="content">
-      <h1>Home</h1>
-      <p>Welcome! This is the home page of my portfolio.</p>
-      <button onclick="addRandomMovie()">Click me to get a random movie 
-          recommendation!</button>
-      <div id="movie-container"></div>
+      <div class="page-title" id="index">
+        <h1>Home</h1>
+      </div>
+      <div id="index-info">
+        <p>Welcome! This is the home page of my portfolio.</p>
+        <br>
+        <br>
+        <button onclick="addRandomMovie()">Click me to get a random movie 
+            recommendation!</button>
+        <div id="movie-container"> </div>
+        <br>
+        <br>
+        <form>
+          <p>Which of these animals do you like most?</p>
+          <div>
+            <input type="radio" id="option1" name="quiz" value="g" checked>
+            <label for="option1">Mountain Goat</label>
+            <input type="radio" id="option2" name="quiz" value="h">
+            <label for="option2">Sloth</label>
+            <input type="radio" id="option3" name="quiz" value="r">
+            <label for="option3">Elephant</label>
+            <input type="radio" id="option4" name="quiz" value="s">
+            <label for="option4">Raccoon</label>
+          </div>
+          <br>
+          <div>
+            <button type="submit">Submit</button>
+          </div>
+        </form>
+        <br>
+        <div id="house-container"></div>
+      </div>
     </div>
   </body>
+  <script src="script.js"></script>
 </html>
