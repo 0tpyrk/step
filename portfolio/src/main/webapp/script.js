@@ -127,3 +127,9 @@ form.addEventListener("submit", function(event) {
   
   event.preventDefault();
 }, false);
+
+async function getQuote() {
+  const response = await fetch('/data');
+  const quote = await response.text();
+  document.getElementById('fetch-test').innerText = quote;
+}
