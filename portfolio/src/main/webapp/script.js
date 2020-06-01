@@ -128,8 +128,21 @@ form.addEventListener("submit", function(event) {
   event.preventDefault();
 }, false);
 
-async function getQuote() {
+async function getComments() {
   const response = await fetch('/data');
-  const quote = await response.text();
-  document.getElementById('fetch-test').innerText = quote;
+  const comments = await response.json();
+  const commentsSectionElement = document.getElementById('comments-section');
+  console.log(comments)
+  commentsSectionElement.innerHTML = '';
+  comments.forEach(function(comm) {
+    commentsSectionElement.appendChild(
+        createListElement(comm));
+  })
+}
+
+/** Creates an <li> element containing text. */
+function createListElement(text) {
+  const liElement = document.createElement('li');
+  liElement.innerText = text;
+  return liElement;
 }
