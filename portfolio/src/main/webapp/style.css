@@ -10,7 +10,7 @@ body {
 }
 
 /* unordered list */
-ul {
+nav ul {
   background-color: #333;
   list-style-type: none;
   margin: 0;
@@ -23,7 +23,7 @@ ul {
 }
 
 /* align navbar elements to the left */
-li {
+nav ul li {
   float: left;
 }
 
@@ -33,7 +33,7 @@ li {
 }
 
 /* text settings */
-li a {
+nav li a {
   color: white;
   display: block;
   padding: 14px 16px;
@@ -42,13 +42,13 @@ li a {
 }
 
 /* show which navbar element we are hovering over by highlighting it */
-li a:hover {
+nav li a:hover {
   background-color: #111;
   color: white;
 }
 
 /* change background of active navbar element */
-.active {
+nav .active {
   background-color: #fffef2;
   color: black;
 }
