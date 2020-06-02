@@ -129,15 +129,19 @@ form.addEventListener("submit", function(event) {
 }, false);
 
 async function getComments() {
-  const response = await fetch('/data');
+  const response = await fetch('/data' + '?' + 'num-comments=' + document.getElementById('num-comments').value);
   const comments = await response.json();
   const commentsSectionElement = document.getElementById('comments-section');
-  console.log(comments)
   commentsSectionElement.innerHTML = '';
   comments.forEach(function(comm) {
     commentsSectionElement.appendChild(
         createListElement(comm.text + ", " + comm.timestamp));
   })
+}
+
+async function deleteComments() {
+  const response = await fetch('/delete-data', {method: 'POST'});
+  getComments();
 }
 
 /** Creates an <li> element containing text. */

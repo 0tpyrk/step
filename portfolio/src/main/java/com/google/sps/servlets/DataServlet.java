@@ -30,20 +30,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
+/** Servlet that returns comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-
-  private List<String> comments;
-
-  @Override
-  public void init() {
-    comments = new ArrayList<Object>();
-  }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+
+    int numComments = getNumComments(request);
+
+    // decreased by 1 in order to count starting from 1 instead of 0
+    numComments--;
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
@@ -51,19 +49,41 @@ public class DataServlet extends HttpServlet {
     PreparedQuery results = datastore.prepare(query);
 
     List<Comment> comments = new ArrayList<>();
+    int count = 0;
     for (Entity entity : results.asIterable()) {
+      if (count > numComments) break;
+      
       long id = entity.getKey().getId();
       String text = (String) entity.getProperty("text");
       long timestamp = (long) entity.getProperty("timestamp");
 
       Comment comment = new Comment(id, text, timestamp);
       comments.add(comment);
+      
+      count++;
     }
 
     String json = convertToJson(comments);
 
     response.setContentType("application/json;");
     response.getWriter().println(json);
+  }
+
+  /** Returns the number of comments to display entered by the user, or -1 if the choice was invalid. */
+  private int getNumComments(HttpServletRequest request) {
+    // Get the input from the form.
+    String numCommentsString = request.getParameter("num-comments");
+
+    // Convert the input to an int.
+    int numComments;
+    try {
+      numComments = Integer.parseInt(numCommentsString);
+    } catch (NumberFormatException e) {
+      System.err.println("Could not convert to int: " + numCommentsString);
+      return -1;
+    }
+
+    return numComments;
   }
 
   /**
