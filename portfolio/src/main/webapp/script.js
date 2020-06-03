@@ -129,7 +129,8 @@ form.addEventListener("submit", function(event) {
 }, false);
 
 async function getComments() {
-  const response = await fetch('/data' + '?' + 'num-comments=' + document.getElementById('num-comments').value);
+  const response = await fetch('/data' + '?' + 'num-comments=' +
+      document.getElementById('num-comments').value);
   const comments = await response.json();
   const commentsSectionElement = document.getElementById('comments-section');
   commentsSectionElement.innerHTML = '';
