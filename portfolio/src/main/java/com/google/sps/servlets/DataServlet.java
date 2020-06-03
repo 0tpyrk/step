@@ -52,10 +52,11 @@ public class DataServlet extends HttpServlet {
       if (count >= numComments) break;
       
       long id = entity.getKey().getId();
+      String user = (String) entity.getProperty("user");
       String text = (String) entity.getProperty("text");
       long timestamp = (long) entity.getProperty("timestamp");
 
-      Comment comment = new Comment(id, text, timestamp);
+      Comment comment = new Comment(id, user, text, timestamp);
       comments.add(comment);
       
       count++;
@@ -96,11 +97,13 @@ public class DataServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the input from the form.
+    String user = getParameter(request, "username", "");
     String text = getParameter(request, "text-input", "");
 
     long timestamp = System.currentTimeMillis();
 
     Entity commentEntity = new Entity("Comment");
+    commentEntity.setProperty("user", user);
     commentEntity.setProperty("text", text);
     commentEntity.setProperty("timestamp", timestamp);
 

@@ -136,7 +136,7 @@ async function getComments() {
   commentsSectionElement.innerHTML = '';
   comments.forEach(function(comm) {
     commentsSectionElement.appendChild(
-        createListElement(comm.text + ", " + comm.timestamp));
+        createListElement(comm.user + ": " + comm.text + ", " + comm.timestamp));
   })
 }
 
