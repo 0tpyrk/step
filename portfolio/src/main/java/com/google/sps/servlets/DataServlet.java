@@ -40,9 +40,6 @@ public class DataServlet extends HttpServlet {
 
     int numComments = getNumComments(request);
 
-    // decreased by 1 in order to count starting from 1 instead of 0
-    numComments--;
-
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
     // PreparedQuery that contains all the comments inside it
@@ -51,7 +48,8 @@ public class DataServlet extends HttpServlet {
     List<Comment> comments = new ArrayList<>();
     int count = 0;
     for (Entity entity : results.asIterable()) {
-      if (count > numComments) break;
+      // >= in order to count starting from 1 instead of 0
+      if (count >= numComments) break;
       
       long id = entity.getKey().getId();
       String text = (String) entity.getProperty("text");
