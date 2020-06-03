@@ -55,8 +55,10 @@ public class DataServlet extends HttpServlet {
       String user = (String) entity.getProperty("user");
       String text = (String) entity.getProperty("text");
       long timestamp = (long) entity.getProperty("timestamp");
+      long likes = (long) entity.getProperty("likes");
+      long dislikes = (long) entity.getProperty("dislikes");
 
-      Comment comment = new Comment(id, user, text, timestamp);
+      Comment comment = new Comment(id, user, text, timestamp, likes, dislikes);
       comments.add(comment);
       
       count++;
@@ -106,6 +108,8 @@ public class DataServlet extends HttpServlet {
     commentEntity.setProperty("user", user);
     commentEntity.setProperty("text", text);
     commentEntity.setProperty("timestamp", timestamp);
+    commentEntity.setProperty("likes", 0);
+    commentEntity.setProperty("dislikes", 0);
 
     // Add comment to datastore
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
