@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that deletes comment data */
+/** Servlet that edits comment data */
 @WebServlet("/edit-data")
 public class EditDataServlet extends HttpServlet {
 

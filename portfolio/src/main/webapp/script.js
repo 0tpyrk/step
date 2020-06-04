@@ -128,6 +128,9 @@ form.addEventListener("submit", function(event) {
   event.preventDefault();
 }, false);
 
+/**
+ * Fetches comments and displays the content, timestamp, likes, and dislikes
+ */
 async function getComments() {
   const response = await fetch('/data' + '?' + 'num-comments=' +
       document.getElementById('num-comments').value);
