@@ -128,6 +128,9 @@ form.addEventListener("submit", function(event) {
   event.preventDefault();
 }, false);
 
+/**
+ * Fetches comments and displays the content, timestamp, likes, and dislikes
+ */
 async function getComments() {
   const response = await fetch('/data' + '?' + 'num-comments=' +
       document.getElementById('num-comments').value);
@@ -135,13 +138,39 @@ async function getComments() {
   const commentsSectionElement = document.getElementById('comments-section');
   commentsSectionElement.innerHTML = '';
   comments.forEach(function(comm) {
+    // comment
     commentsSectionElement.appendChild(
-        createListElement(comm.text + ", " + comm.timestamp));
+        createListElement(comm.user + ": " + comm.text + ", " + comm.timestamp 
+        + "; Likes: " + comm.likes + ", Dislikes: " + comm.dislikes));
+
+    // like button
+    var likeButton = document.createElement("button");
+    likeButton.innerHTML = ":)";
+    var like = function () {
+        editComment(comm.id, "like");
+    }
+    likeButton.onclick = like;
+    commentsSectionElement.appendChild(likeButton);
+
+    // dislike button
+    var dislikeButton = document.createElement("button");
+    dislikeButton.innerHTML = ":(";
+    var dislike = function () {
+        editComment(comm.id, "dislike");
+    }
+    dislikeButton.onclick = dislike;
+    commentsSectionElement.appendChild(dislikeButton);
   })
 }
 
 async function deleteComments() {
   const response = await fetch('/delete-data', {method: 'POST'});
+  getComments();
+}
+
+async function editComment(key, type) {
+  const response = await fetch('/edit-data' + '?' + 'key=' +
+      key + "&type=" + type, {method: 'POST'});
   getComments();
 }
 
