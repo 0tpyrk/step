@@ -138,11 +138,40 @@ async function getComments() {
     commentsSectionElement.appendChild(
         createListElement(comm.user + ": " + comm.text + ", " + comm.timestamp 
         + "; Likes: " + comm.likes + ", Dislikes: " + comm.dislikes));
+    // like button
+    var likeButton = document.createElement("button");
+    likeButton.innerHTML = ":)";
+    var like = function () {
+        likeComment(comm.id);
+    }
+    likeButton.onclick = like;
+    commentsSectionElement.appendChild(likeButton);
+
+    // dislike button
+    var dislikeButton = document.createElement("button");
+    dislikeButton.innerHTML = ":(";
+    var dislike = function () {
+        dislikeComment(comm.id);
+    }
+    dislikeButton.onclick = dislike;
+    commentsSectionElement.appendChild(dislikeButton);
   })
 }
 
 async function deleteComments() {
   const response = await fetch('/delete-data', {method: 'POST'});
+  getComments();
+}
+
+async function likeComment(key) {
+  const response = await fetch('/edit-data' + '?' + 'key=' +
+      key + "&type=like", {method: 'POST'});
+  getComments();
+}
+
+async function dislikeComment(key) {
+  const response = await fetch('/edit-data' + '?' + 'key=' +
+      key + "&type=dislike", {method: 'POST'});
   getComments();
 }
 

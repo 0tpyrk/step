@@ -57,7 +57,7 @@ public class DataServlet extends HttpServlet {
       long timestamp = (long) entity.getProperty("timestamp");
       long likes = (long) entity.getProperty("likes");
       long dislikes = (long) entity.getProperty("dislikes");
-
+      
       Comment comment = new Comment(id, user, text, timestamp, likes, dislikes);
       comments.add(comment);
       
