@@ -135,14 +135,16 @@ async function getComments() {
   const commentsSectionElement = document.getElementById('comments-section');
   commentsSectionElement.innerHTML = '';
   comments.forEach(function(comm) {
+    // comment
     commentsSectionElement.appendChild(
         createListElement(comm.user + ": " + comm.text + ", " + comm.timestamp 
         + "; Likes: " + comm.likes + ", Dislikes: " + comm.dislikes));
+
     // like button
     var likeButton = document.createElement("button");
     likeButton.innerHTML = ":)";
     var like = function () {
-        likeComment(comm.id);
+        editComment(comm.id, "like");
     }
     likeButton.onclick = like;
     commentsSectionElement.appendChild(likeButton);
@@ -151,7 +153,7 @@ async function getComments() {
     var dislikeButton = document.createElement("button");
     dislikeButton.innerHTML = ":(";
     var dislike = function () {
-        dislikeComment(comm.id);
+        editComment(comm.id, "dislike");
     }
     dislikeButton.onclick = dislike;
     commentsSectionElement.appendChild(dislikeButton);
@@ -163,15 +165,9 @@ async function deleteComments() {
   getComments();
 }
 
-async function likeComment(key) {
+async function editComment(key, type) {
   const response = await fetch('/edit-data' + '?' + 'key=' +
-      key + "&type=like", {method: 'POST'});
-  getComments();
-}
-
-async function dislikeComment(key) {
-  const response = await fetch('/edit-data' + '?' + 'key=' +
-      key + "&type=dislike", {method: 'POST'});
+      key + "&type=" + type, {method: 'POST'});
   getComments();
 }
 
