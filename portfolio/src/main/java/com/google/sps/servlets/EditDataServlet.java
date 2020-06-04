@@ -29,6 +29,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.Long;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /** Servlet that edits comment data */
 @WebServlet("/edit-data")
@@ -45,12 +48,29 @@ public class EditDataServlet extends HttpServlet {
 
     // PreparedQuery that contains all the comments inside it
     PreparedQuery results = datastore.prepare(query);
+
+    // Create Logger for warning reporting
+    Logger logger = Logger.getLogger(EditDataServlet.class.getName());
+    logger.setLevel(Level.WARNING); 
+
     for (Entity entity : results.asIterable()) {
       if (type.equals("like")) {
-          entity.setProperty("likes", ((long) entity.getProperty("likes")) + 1);
+        Object likes = entity.getProperty("likes");
+        if (likes instanceof Long) {
+          entity.setProperty("likes", ((long) likes) + 1);
+        }
+        else {
+          logger.warning("Could not convert Entity's likes to long"); 
+        }
       }
       else if (type.equals("dislike")) {
-          entity.setProperty("dislikes", ((long) entity.getProperty("dislikes")) + 1);
+        Object dislikes = entity.getProperty("dislikes");
+        if (dislikes instanceof Long) {
+          entity.setProperty("dislikes", ((long) dislikes) + 1);
+        }
+        else {
+          logger.warning("Could not convert Entity's dislikes to long"); 
+        }
       }
       datastore.put(entity);
     }

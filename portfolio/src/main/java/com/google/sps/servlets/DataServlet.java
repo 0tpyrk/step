@@ -29,6 +29,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.Long;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /** Servlet that returns comments data */
 @WebServlet("/data")
@@ -45,18 +48,54 @@ public class DataServlet extends HttpServlet {
     // PreparedQuery that contains all the comments inside it
     PreparedQuery results = datastore.prepare(query);
 
+    // Create Logger for warning reporting
+    Logger logger = Logger.getLogger(DataServlet.class.getName());
+    logger.setLevel(Level.WARNING); 
+
     List<Comment> comments = new ArrayList<>();
     int count = 0;
     for (Entity entity : results.asIterable()) {
       // >= in order to count starting from 1 instead of 0
       if (count >= numComments) break;
-      
-      long id = entity.getKey().getId();
-      String user = (String) entity.getProperty("user");
-      String text = (String) entity.getProperty("text");
-      long timestamp = (long) entity.getProperty("timestamp");
-      long likes = (long) entity.getProperty("likes");
-      long dislikes = (long) entity.getProperty("dislikes");
+  
+      Object input = entity.getKey().getId();
+      long id = 0;
+      if (input instanceof Long) {
+        id = (long) input;
+      }
+      else {
+        logger.warning("Could not convert Entity's ID to long"); 
+      }
+
+      String user = entity.getProperty("user").toString();
+      String text = entity.getProperty("text").toString();
+
+      input = entity.getProperty("timestamp");
+      long timestamp = 0;
+      if (input instanceof Long) {
+        timestamp = (long) input;
+      }
+      else {
+        logger.warning("Could not convert Entity's timestamp to long"); 
+      }
+
+      input = entity.getProperty("likes");
+      long likes = 0;
+      if (input instanceof Long) {
+        likes = (long) input;
+      }
+      else {
+        logger.warning("Could not convert Entity's likes to long"); 
+      }
+
+      input = entity.getProperty("dislikes");
+      long dislikes = 0;
+      if (input instanceof Long) {
+        dislikes = (long) input;
+      }
+      else {
+        logger.warning("Could not convert Entity's dislikes to long"); 
+      }
       
       Comment comment = new Comment(id, user, text, timestamp, likes, dislikes);
       comments.add(comment);
