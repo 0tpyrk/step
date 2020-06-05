@@ -135,31 +135,51 @@ async function getComments() {
   const response = await fetch('/data' + '?' + 'num-comments=' +
       document.getElementById('num-comments').value);
   const comments = await response.json();
-  const commentsSectionElement = document.getElementById('comments-section');
+  const commentsSectionElement = document.getElementById('comments-list');
   commentsSectionElement.innerHTML = '';
   comments.forEach(function(comm) {
+
     // comment
-    commentsSectionElement.appendChild(
-        createListElement(comm.user + ": " + comm.text + ", " + comm.timestamp 
-        + "; Likes: " + comm.likes + ", Dislikes: " + comm.dislikes));
+    const liElement = document.createElement('li');
+
+    const headerElement = document.createElement('div');
+    headerElement.innerHTML = comm.user.bold() + ', ' + getTimeSince(comm.timestamp);
+    liElement.appendChild(headerElement);
+
+    const likesElement = document.createElement('div');
+    likesElement.id = 'likes-section';
 
     // like button
+    likesElement.appendChild(document.createTextNode(comm.likes));
     var likeButton = document.createElement("button");
     likeButton.innerHTML = ":)";
+    likeButton.id = "like";
     var like = function () {
         editComment(comm.id, "like");
     }
     likeButton.onclick = like;
-    commentsSectionElement.appendChild(likeButton);
+    likesElement.appendChild(likeButton);
+
+    likesElement.appendChild(document.createTextNode(" "));
 
     // dislike button
+    likesElement.appendChild(document.createTextNode(comm.dislikes));
     var dislikeButton = document.createElement("button");
     dislikeButton.innerHTML = ":(";
+    dislikeButton.id = "dislike";
     var dislike = function () {
         editComment(comm.id, "dislike");
     }
     dislikeButton.onclick = dislike;
-    commentsSectionElement.appendChild(dislikeButton);
+    likesElement.appendChild(dislikeButton);
+
+    headerElement.appendChild(likesElement);
+
+    const bodyElement = document.createElement('p');
+    bodyElement.innerHTML = comm.text;
+    liElement.appendChild(bodyElement);
+
+    commentsSectionElement.appendChild(liElement);
   })
 }
 
@@ -168,15 +188,60 @@ async function deleteComments() {
   getComments();
 }
 
-async function editComment(key, type) {
-  const response = await fetch('/edit-data' + '?' + 'key=' +
-      key + "&type=" + type, {method: 'POST'});
-  getComments();
+function editComment(key, type) {
+  getID().then((response) => {
+      fetch('/edit-data' + '?' + 'key=' + key + "&type=" + type + '&id=' + 
+      response, {method: 'POST'}).then(() => {
+      getComments()})
+      });
 }
 
-/** Creates an <li> element containing text. */
-function createListElement(text) {
-  const liElement = document.createElement('li');
-  liElement.innerText = text;
-  return liElement;
+function getTimeSince(time) {
+  var currDate = Date.now();
+  var commDate = new Date(time);
+
+  // difference in milliseconds
+  var msDiff = currDate - commDate;
+
+  // difference in seconds
+  var sDiff = msDiff / 1000;
+
+  if (sDiff < 60) {
+    if (sDiff < 2) return Math.trunc(sDiff) + " second ago";
+    else return Math.trunc(sDiff) + " seconds ago";
+  }
+
+  // difference in minutes
+  var mDiff = sDiff / 60;
+  if (mDiff < 60) {
+    if (mDiff < 2) return Math.trunc(mDiff) + " minute ago"
+    else return Math.trunc(mDiff) + " minutes ago";
+  }
+
+  // difference in hours
+  var hDiff = mDiff / 60;
+  if (hDiff < 24) {
+    if (hDiff < 2) return Math.trunc(hDiff) + " hour ago";
+    else return Math.trunc(hDiff) + " hours ago";
+  }
+
+  // difference in days
+  var dDiff = hDiff / 24;
+  if (dDiff < 30) {
+    if (dDiff < 2) return Math.trunc(dDiff) + " day ago";
+    else return Math.trunc(dDiff) + " days ago";
+  }
+
+  return "";
+}
+
+async function getID() {
+  var id = getCookie('id');
+  if (id == '') {
+    const response = await fetch('/id');
+    const newID = await response.json();
+    id = newID.propertyMap.id;
+    setCookie('id', id);
+  }
+  return id;
 }

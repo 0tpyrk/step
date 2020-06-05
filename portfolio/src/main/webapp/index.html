@@ -31,7 +31,6 @@
             recommendation!</button>
         <div id="movie-container"> </div>
         <br>
-        <br>
         <form>
           <p>Which of these animals do you like most?</p>
           <div>
@@ -64,16 +63,19 @@
           </form>
           <br>
           <br>
+        </div>
+        <br>
+      </div>
+      <div id="comments-section">
+          <p>Comments:
           <select id="num-comments" onchange="getComments()">
             <option value="5">5</option>
             <option value="10">10</option>
             <option value="20">20</option>
             <option value="50">50</option>
-          </select>
+          </select></p>
           <!-- <button onclick="deleteComments()">Delete All Comments</button> -->
-        </div>
-        <br>
-        <ul id = "comments-section"></ul>
+          <ul id="comments-list"></ul>
       </div>
     </div>
   </body>
