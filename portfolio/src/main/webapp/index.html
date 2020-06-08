@@ -31,7 +31,6 @@
             recommendation!</button>
         <div id="movie-container"> </div>
         <br>
-        <br>
         <form>
           <p>Which of these animals do you like most?</p>
           <div>
@@ -53,26 +52,30 @@
         <div id="house-container"></div>
         <br>
         <br>
-        <form action="/data" method="POST">
-          <label for="username">Name: </label>
-          <textarea id="username" name="username"></textarea>
-          <p>Comment:</p>
-          <textarea name="text-input"></textarea>
+        <div id="comment-submission">
+          <form id="comment-submission" action="/data" method="POST">
+            <input type="text" id="username" name="username" placeholder="Name" required>
+            <br>
+            <textarea id="text-input" name="text-input" placeholder="Write comment here." required></textarea>
+            <br>
+            <input type="submit">
+            <br>
+          </form>
           <br>
           <br>
-          <input type="submit"/>
-        </form>
+        </div>
         <br>
-        <br>
-        <select id="num-comments" onchange="getComments()">
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="50">50</option>
-        </select>
-        <!-- <button onclick="deleteComments()">Delete All Comments</button> -->
-        <br>
-        <ul id = "comments-section"></ul>
+      </div>
+      <div id="comments-section">
+          <p>Comments:
+          <select id="num-comments" onchange="getComments()">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+          </select></p>
+          <!-- <button onclick="deleteComments()">Delete All Comments</button> -->
+          <ul id="comments-list"></ul>
       </div>
     </div>
   </body>

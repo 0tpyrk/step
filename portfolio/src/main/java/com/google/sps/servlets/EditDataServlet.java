@@ -16,12 +16,16 @@ package com.google.sps.servlets;
 
 import java.io.IOException;
 import com.google.gson.Gson;
+import java.util.List;
+import java.util.ArrayList;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.sps.data.Comment;
@@ -41,38 +45,72 @@ public class EditDataServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Key key = KeyFactory.createKey("Comment", Long.parseLong(request.getParameter("key")));
     String type = request.getParameter("type");
+    long userID = Long.parseLong(request.getParameter("id"));
     
-    Query query = new Query("Comment", key);
+    Query keyQuery = new Query("Comment", key);
+    FilterPredicate filter = new FilterPredicate("id", Query.FilterOperator.EQUAL, userID);
+    Query idQuery = new Query("ID");
+    idQuery.setFilter(filter);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
     // PreparedQuery that contains all the comments inside it
-    PreparedQuery results = datastore.prepare(query);
+    PreparedQuery commResults = datastore.prepare(keyQuery);
+    // PreparedQuery that has the user who liked the comment inside it
+    PreparedQuery userResults = datastore.prepare(idQuery);
 
     // Create Logger for warning reporting
     Logger logger = Logger.getLogger(EditDataServlet.class.getName());
     logger.setLevel(Level.WARNING); 
 
-    for (Entity entity : results.asIterable()) {
-      if (type.equals("like")) {
-        Object likes = entity.getProperty("likes");
-        if (likes instanceof Long) {
-          entity.setProperty("likes", ((long) likes) + 1);
+    for (Entity comment : commResults.asIterable()) {
+      // Get comment's id
+      Object input = comment.getKey().getId();
+      long commID = 0;
+      if (input instanceof Long) {
+        commID = (long) input;
+      }
+      else {
+        logger.warning("Could not convert comment's ID to long"); 
+      }
+
+      for (Entity user : userResults.asIterable()) {
+        ArrayList<Long> userLikes = null;
+        Object objUserLikes = user.getProperty("likes");
+        if (objUserLikes instanceof ArrayList) {
+            userLikes = (ArrayList<Long>) objUserLikes;
         }
         else {
-          logger.warning("Could not convert Entity's likes to long"); 
+            logger.warning("Could not convert User's likes list to ArrayList<Long>"); 
+        }
+
+        // check to make sure user's list of liked comments doesn't have this comment inside of it
+        if (!userLikes.contains(commID)) {
+          
+          if (type.equals("like")) {
+            Object likes = comment.getProperty("likes");
+            if (likes instanceof Long) {
+              comment.setProperty("likes", ((long) likes) + 1);
+            }
+            else {
+              logger.warning("Could not convert comment's likes to long"); 
+            }
+          }
+          else if (type.equals("dislike")) {
+            Object dislikes = comment.getProperty("dislikes");
+            if (dislikes instanceof Long) {
+              comment.setProperty("dislikes", ((long) dislikes) + 1);
+            }
+            else {
+              logger.warning("Could not convert comment's dislikes to long"); 
+            }
+          }
+          userLikes.add(commID);
+          user.setProperty("likes", userLikes);
+          datastore.put(user);
+          datastore.put(comment);
         }
       }
-      else if (type.equals("dislike")) {
-        Object dislikes = entity.getProperty("dislikes");
-        if (dislikes instanceof Long) {
-          entity.setProperty("dislikes", ((long) dislikes) + 1);
-        }
-        else {
-          logger.warning("Could not convert Entity's dislikes to long"); 
-        }
-      }
-      datastore.put(entity);
     }
   }
 
