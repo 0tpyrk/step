@@ -63,15 +63,15 @@ public class EditDataServlet extends HttpServlet {
     Logger logger = Logger.getLogger(EditDataServlet.class.getName());
     logger.setLevel(Level.WARNING); 
 
-    for (Entity entity : commResults.asIterable()) {
+    for (Entity comment : commResults.asIterable()) {
       // Get comment's id
-      Object input = entity.getKey().getId();
-      long id = 0;
+      Object input = comment.getKey().getId();
+      long commID = 0;
       if (input instanceof Long) {
-        id = (long) input;
+        commID = (long) input;
       }
       else {
-        logger.warning("Could not convert Entity's ID to long"); 
+        logger.warning("Could not convert comment's ID to long"); 
       }
 
       for (Entity user : userResults.asIterable()) {
@@ -85,30 +85,30 @@ public class EditDataServlet extends HttpServlet {
         }
 
         // check to make sure user's list of liked comments doesn't have this comment inside of it
-        if (!userLikes.contains(id)) {
+        if (!userLikes.contains(commID)) {
           
           if (type.equals("like")) {
-            Object likes = entity.getProperty("likes");
+            Object likes = comment.getProperty("likes");
             if (likes instanceof Long) {
-              entity.setProperty("likes", ((long) likes) + 1);
+              comment.setProperty("likes", ((long) likes) + 1);
             }
             else {
-              logger.warning("Could not convert Entity's likes to long"); 
+              logger.warning("Could not convert comment's likes to long"); 
             }
           }
           else if (type.equals("dislike")) {
-            Object dislikes = entity.getProperty("dislikes");
+            Object dislikes = comment.getProperty("dislikes");
             if (dislikes instanceof Long) {
-              entity.setProperty("dislikes", ((long) dislikes) + 1);
+              comment.setProperty("dislikes", ((long) dislikes) + 1);
             }
             else {
-              logger.warning("Could not convert Entity's dislikes to long"); 
+              logger.warning("Could not convert comment's dislikes to long"); 
             }
           }
-          userLikes.add(id);
+          userLikes.add(commID);
           user.setProperty("likes", userLikes);
           datastore.put(user);
-          datastore.put(entity);
+          datastore.put(comment);
         }
       }
     }

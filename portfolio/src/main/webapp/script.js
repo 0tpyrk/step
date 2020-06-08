@@ -138,41 +138,13 @@ async function getComments() {
   const commentsSectionElement = document.getElementById('comments-list');
   commentsSectionElement.innerHTML = '';
   comments.forEach(function(comm) {
-
-    // comment
     const liElement = document.createElement('li');
 
     const headerElement = document.createElement('div');
     headerElement.innerHTML = comm.user.bold() + ', ' + getTimeSince(comm.timestamp);
     liElement.appendChild(headerElement);
 
-    const likesElement = document.createElement('div');
-    likesElement.id = 'likes-section';
-
-    // like button
-    likesElement.appendChild(document.createTextNode(comm.likes));
-    var likeButton = document.createElement("button");
-    likeButton.innerHTML = ":)";
-    likeButton.id = "like";
-    var like = function () {
-        editComment(comm.id, "like");
-    }
-    likeButton.onclick = like;
-    likesElement.appendChild(likeButton);
-
-    likesElement.appendChild(document.createTextNode(" "));
-
-    // dislike button
-    likesElement.appendChild(document.createTextNode(comm.dislikes));
-    var dislikeButton = document.createElement("button");
-    dislikeButton.innerHTML = ":(";
-    dislikeButton.id = "dislike";
-    var dislike = function () {
-        editComment(comm.id, "dislike");
-    }
-    dislikeButton.onclick = dislike;
-    likesElement.appendChild(dislikeButton);
-
+    const likesElement = createLikesButtons(comm);
     headerElement.appendChild(likesElement);
 
     const bodyElement = document.createElement('p');
@@ -181,6 +153,40 @@ async function getComments() {
 
     commentsSectionElement.appendChild(liElement);
   })
+}
+
+/**
+ * Creates the like and dislike buttons inside their own likesElement
+ */
+function createLikesButtons(comm) {
+  var likesElement = document.createElement('div');
+  likesElement.id = 'likes-section';
+
+  // like button
+  likesElement.appendChild(document.createTextNode(comm.likes));
+  var likeButton = document.createElement("button");
+  likeButton.innerHTML = ":)";
+  likeButton.id = "like";
+  var like = function () {
+    editComment(comm.id, "like");
+  }
+  likeButton.onclick = like;
+  likesElement.appendChild(likeButton);
+
+  likesElement.appendChild(document.createTextNode(" "));
+
+  // dislike button
+  likesElement.appendChild(document.createTextNode(comm.dislikes));
+  var dislikeButton = document.createElement("button");
+  dislikeButton.innerHTML = ":(";
+  dislikeButton.id = "dislike";
+  var dislike = function () {
+    editComment(comm.id, "dislike");
+  }
+  dislikeButton.onclick = dislike;
+  likesElement.appendChild(dislikeButton);
+  
+  return likesElement;
 }
 
 async function deleteComments() {

@@ -42,7 +42,6 @@ public class IDDataServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Query query = new Query("ID").addSort("id", SortDirection.DESCENDING);
 
-
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
     // List that contains all the users inside it
@@ -55,9 +54,7 @@ public class IDDataServlet extends HttpServlet {
 
     // find what the last used id number is
     long lastID = 0;
-    int count = 0;
-    for (Entity entity : results.asIterable()) {
-      if (count >= 1) break;
+    for (Entity entity : results.asIterable(FetchOptions.Builder.withLimit(1))) {
       Object input = entity.getProperty("id");
       if (input instanceof Long) {
         lastID = (long) input;
@@ -65,14 +62,16 @@ public class IDDataServlet extends HttpServlet {
       else {
         logger.warning("Could not convert Entity's ID to long"); 
       }
-      count++;
     } 
     
     Entity idEntity = new Entity("ID");
     idEntity.setProperty("id", lastID + 1);
     ArrayList<Long> list = new ArrayList<Long>();
-    long a = 0;
-    list.add(a);
+
+    // adding intial value to the list, otherwise entity draws NullPointerException later
+    // when taken out of the datastore
+    long initVal = 0;
+    list.add(initVal);
     idEntity.setUnindexedProperty("likes", list);
 
     // Add person to datastore
