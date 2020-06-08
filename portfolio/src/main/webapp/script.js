@@ -141,7 +141,8 @@ async function getComments() {
     const liElement = document.createElement('li');
 
     const headerElement = document.createElement('div');
-    headerElement.innerHTML = comm.user.bold() + ', ' + getTimeSince(comm.timestamp);
+    headerElement.innerHTML = comm.user.bold() + ', ' 
+        + getTimeSince(comm.timestamp);
     liElement.appendChild(headerElement);
 
     const likesElement = createLikesButtons(comm);
@@ -250,4 +251,18 @@ async function getID() {
     setCookie('id', id);
   }
   return id;
+}
+
+async function getLogin() {
+  const response = await fetch('/login');
+  const html = await response.text();
+  const navbarSlot = document.getElementById('login');
+  navbarSlot.innerHTML = html;
+}
+
+async function getCommentsForm() {
+  const response = await fetch('/form');
+  const html = await response.text();
+  const comments = document.getElementById('comment-submission');
+  comments.innerHTML = html;
 }
