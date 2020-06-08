@@ -251,3 +251,10 @@ async function getID() {
   }
   return id;
 }
+
+async function getLogin() {
+    const response = await fetch('/login');
+    const html = await response.text();
+    const navbarSlot = document.getElementById('login');
+    navbarSlot.innerHTML = html;
+}
