@@ -17,6 +17,7 @@ package com.google.sps.servlets;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +29,7 @@ public class LoginServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("text/html");
+    PrintWriter out = response.getWriter();
 
     UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn()) {
@@ -36,13 +38,16 @@ public class LoginServlet extends HttpServlet {
       String urlToRedirectToAfterUserLogsOut = "/";
       String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
 
-      response.getWriter().println("<a href=\"" + logoutUrl + "\">" + userEmail + "</a>");
+      out.println("<button class=\"dropbtn\">" + userEmail + "</button>");
+      out.println("<div class=\"dropdown-content\">");
+      out.println("<a href=\"" + logoutUrl + "\">Logout</a>");
+      out.println("</div>");
     } else {
       // create navbar icon
       String urlToRedirectToAfterUserLogsIn = "/";
       String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
 
-      response.getWriter().println("<a href=\"" + loginUrl + "\">Login</a>");
+      response.getWriter().println("<li><a href=\"" + loginUrl + "\">Login</a></li>");
     }
   }
 }
