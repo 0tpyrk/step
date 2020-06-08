@@ -17,32 +17,34 @@ package com.google.sps.servlets;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/login")
-public class LoginServlet extends HttpServlet {
+@WebServlet("/form")
+public class FormServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("text/html");
+    response.setContentType("text/html;");
+    PrintWriter out = response.getWriter();
 
     UserService userService = UserServiceFactory.getUserService();
+
     if (userService.isUserLoggedIn()) {
-      // create navbar icon
-      String userEmail = userService.getCurrentUser().getEmail();
-      String urlToRedirectToAfterUserLogsOut = "/";
-      String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
-
-      response.getWriter().println("<a href=\"" + logoutUrl + "\">" + userEmail + "</a>");
+      out.println("<form id=\"comment-submission\" action=\"/data\" method=\"POST\">");
+      out.println("<input type=\"text\" id=\"username\" name=\"username\" placeholder=\"Name\" required>");
+      out.println("<br>");
+      out.println("<textarea id=\"text-input\" name=\"text-input\" placeholder=\"Write comment here.\" required></textarea>");
+      out.println("<br>");
+      out.println("<input type=\"submit\">");
+      out.println("<br>");
+      out.println("</form>");
     } else {
-      // create navbar icon
-      String urlToRedirectToAfterUserLogsIn = "/";
-      String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
-
-      response.getWriter().println("<a href=\"" + loginUrl + "\">Login</a>");
+      String loginUrl = userService.createLoginURL("/");
+      out.println("<p>To leave a comment, login <a href=\"" + loginUrl + "\">here</a>.</p>");
     }
   }
 }

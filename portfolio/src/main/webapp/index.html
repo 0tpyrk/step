@@ -5,7 +5,7 @@
     <title>Home</title>
     <link rel="stylesheet" href="style.css">
   </head>
-  <body onload="checkCookie(); getLogin(); getComments()">
+  <body onload="checkCookie(); getLogin(); getComments(); getCommentsForm()">
     <h1 id="site-title">William Lew</h1>
     <!-- navbar -->
     <nav>
@@ -52,20 +52,6 @@
         <br>
         <div id="house-container"></div>
         <br>
-        <br>
-        <div id="comment-submission">
-          <form id="comment-submission" action="/data" method="POST">
-            <input type="text" id="username" name="username" placeholder="Name" required>
-            <br>
-            <textarea id="text-input" name="text-input" placeholder="Write comment here." required></textarea>
-            <br>
-            <input type="submit">
-            <br>
-          </form>
-          <br>
-          <br>
-        </div>
-        <br>
       </div>
       <div id="comments-section">
           <p>Comments:
@@ -75,6 +61,8 @@
             <option value="20">20</option>
             <option value="50">50</option>
           </select></p>
+          <div id="comment-submission">
+          </div>
           <!-- <button onclick="deleteComments()">Delete All Comments</button> -->
           <ul id="comments-list"></ul>
       </div>

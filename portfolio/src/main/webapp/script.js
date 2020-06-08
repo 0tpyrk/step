@@ -253,8 +253,15 @@ async function getID() {
 }
 
 async function getLogin() {
-    const response = await fetch('/login');
-    const html = await response.text();
-    const navbarSlot = document.getElementById('login');
-    navbarSlot.innerHTML = html;
+  const response = await fetch('/login');
+  const html = await response.text();
+  const navbarSlot = document.getElementById('login');
+  navbarSlot.innerHTML = html;
+}
+
+async function getCommentsForm() {
+  const response = await fetch('/form');
+  const html = await response.text();
+  const comments = document.getElementById('comment-submission');
+  comments.innerHTML = html;
 }

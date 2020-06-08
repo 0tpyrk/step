@@ -93,7 +93,7 @@ nav .active {
 
 #index-info {
   background-color: #ffdac1;
-  height: 900px;
+  height: 500px;
   padding: 20px;
 }
 
@@ -173,8 +173,12 @@ nav .active {
   background-color: #af4c4c;
 }
 
-#comments-section #likes-section{
+#comments-section #likes-section {
   float: right;
+}
+
+#comments-section a:visited {
+  color: pink;
 }
 
 
