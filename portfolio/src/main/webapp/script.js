@@ -141,7 +141,8 @@ async function getComments() {
     const liElement = document.createElement('li');
 
     const headerElement = document.createElement('div');
-    headerElement.innerHTML = comm.user.bold() + ', ' + getTimeSince(comm.timestamp);
+    headerElement.innerHTML = comm.user.bold() + ', ' 
+        + getTimeSince(comm.timestamp);
     liElement.appendChild(headerElement);
 
     const likesElement = createLikesButtons(comm);

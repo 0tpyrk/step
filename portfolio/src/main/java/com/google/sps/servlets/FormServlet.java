@@ -34,17 +34,21 @@ public class FormServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
 
     if (userService.isUserLoggedIn()) {
-      out.println("<form id=\"comment-submission\" action=\"/data\" method=\"POST\">");
-      out.println("<input type=\"text\" id=\"username\" name=\"username\" placeholder=\"Name\" required>");
+      out.println("<form id=\"comment-submission\" action=\"/data\" "
+          + "method=\"POST\">");
+      out.println("<input type=\"text\" id=\"username\" name=\"username\" " 
+          + "placeholder=\"Name\" required>");
       out.println("<br>");
-      out.println("<textarea id=\"text-input\" name=\"text-input\" placeholder=\"Write comment here.\" required></textarea>");
+      out.println("<textarea id=\"text-input\" name=\"text-input\" "
+          + "placeholder=\"Write comment here.\" required></textarea>");
       out.println("<br>");
       out.println("<input type=\"submit\">");
       out.println("<br>");
       out.println("</form>");
     } else {
       String loginUrl = userService.createLoginURL("/");
-      out.println("<p>To leave a comment, login <a href=\"" + loginUrl + "\">here</a>.</p>");
+      out.println(String.format("<p>To leave a comment, login <a href=\"%1$s"
+          + "\">here</a>.</p>", loginUrl));
     }
   }
 }

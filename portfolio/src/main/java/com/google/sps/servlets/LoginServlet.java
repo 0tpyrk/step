@@ -36,18 +36,22 @@ public class LoginServlet extends HttpServlet {
       // create navbar icon
       String userEmail = userService.getCurrentUser().getEmail();
       String urlToRedirectToAfterUserLogsOut = "/";
-      String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
+      String logoutUrl =
+          userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
 
-      out.println("<button class=\"dropbtn\">" + userEmail + "</button>");
+      out.println(String.format("<button class=\"dropbtn\">%1$s</button>",
+          userEmail));
       out.println("<div class=\"dropdown-content\">");
-      out.println("<a href=\"" + logoutUrl + "\">Logout</a>");
+      out.println(String.format("<a href=\"%1$s\">Logout</a>", logoutUrl));
       out.println("</div>");
     } else {
       // create navbar icon
       String urlToRedirectToAfterUserLogsIn = "/";
-      String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
+      String loginUrl =
+          userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
 
-      response.getWriter().println("<li><a href=\"" + loginUrl + "\">Login</a></li>");
+      response.getWriter().println(String.format("<li><a "
+          + "href=\"%1$s\">Login</a></li>", loginUrl));
     }
   }
 }
