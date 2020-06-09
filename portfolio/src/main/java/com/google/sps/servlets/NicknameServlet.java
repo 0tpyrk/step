@@ -33,6 +33,9 @@ import java.util.ArrayList;
 @WebServlet("/nickname")
 public class NicknameServlet extends HttpServlet {
 
+  /** 
+   *  Displays the form for entering a new nickname
+   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("text/html");
@@ -58,6 +61,10 @@ public class NicknameServlet extends HttpServlet {
     }
   }
 
+  /** 
+   *  Handles responses to nickname form and creates new users 
+   *  for the datastore
+   */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
@@ -72,7 +79,7 @@ public class NicknameServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Entity entity = new Entity("User", id);
 
-    ArrayList<Long> list = new ArrayList<Long>();
+    List<Long> list = new ArrayList<Long>();
     // adding intial value to the list, otherwise entity draws NullPointerException
     // later when taken out of the datastore
     long initVal = 0;
@@ -104,7 +111,7 @@ public class NicknameServlet extends HttpServlet {
     if (entity == null) {
       return "";
     }
-    String nickname = (String) entity.getProperty("nickname");
+    String nickname = entity.getProperty("nickname").toString();
     return nickname;
   }
 }

@@ -37,7 +37,11 @@ import java.util.logging.Level;
 /** Servlet that returns id data */
 @WebServlet("/id")
 public class IDDataServlet extends HttpServlet {
-
+  
+  /** 
+   *  Creates an ID for a new user of the site
+   *  DEPRECATED
+   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Query query = new Query("ID").addSort("id", SortDirection.DESCENDING);
@@ -58,8 +62,7 @@ public class IDDataServlet extends HttpServlet {
       Object input = entity.getProperty("id");
       if (input instanceof Long) {
         lastID = (long) input;
-      }
-      else {
+      } else {
         logger.warning("Could not convert Entity's ID to long"); 
       }
     } 

@@ -39,6 +39,10 @@ import java.util.logging.Level;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
+  /** 
+   *  Displays comments in the comments section after retrieving them from
+   *  the datastore
+   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Query query =
@@ -65,8 +69,7 @@ public class DataServlet extends HttpServlet {
       long id = 0;
       if (input instanceof Long) {
         id = (long) input;
-      }
-      else {
+      } else {
         logger.warning("Could not convert Entity's ID to long"); 
       }
 
@@ -77,8 +80,7 @@ public class DataServlet extends HttpServlet {
       long timestamp = 0;
       if (input instanceof Long) {
         timestamp = (long) input;
-      }
-      else {
+      } else {
         logger.warning("Could not convert Entity's timestamp to long"); 
       }
 
@@ -86,8 +88,7 @@ public class DataServlet extends HttpServlet {
       long likes = 0;
       if (input instanceof Long) {
         likes = (long) input;
-      }
-      else {
+      } else {
         logger.warning("Could not convert Entity's likes to long"); 
       }
 
@@ -95,11 +96,11 @@ public class DataServlet extends HttpServlet {
       long dislikes = 0;
       if (input instanceof Long) {
         dislikes = (long) input;
-      }
-      else {
+      } else {
         logger.warning("Could not convert Entity's dislikes to long"); 
       }
       
+      // TODO: implement Builder pattern
       Comment comment =
           new Comment(id, user, text, timestamp, likes, dislikes);
       comments.add(comment);
@@ -142,6 +143,10 @@ public class DataServlet extends HttpServlet {
     return json;
   }
 
+  /** 
+   *  Handles the creation of a new comment using user input
+   *  from the form on the index page
+   */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the input from the form.

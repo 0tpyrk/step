@@ -26,6 +26,10 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/form")
 public class FormServlet extends HttpServlet {
 
+  /** 
+   *  Creates the comment submission form on the index page depending
+   *  on if the user is logged in or not
+   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("text/html;");

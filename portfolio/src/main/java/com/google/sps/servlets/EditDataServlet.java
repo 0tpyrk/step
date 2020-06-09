@@ -43,6 +43,10 @@ import java.util.logging.Level;
 @WebServlet("/edit-data")
 public class EditDataServlet extends HttpServlet {
 
+  /** 
+   *  Handles requests to edit data of specific comments
+   *  (such as likes and dislikes)
+   */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
@@ -75,8 +79,7 @@ public class EditDataServlet extends HttpServlet {
         long commID = 0;
         if (input instanceof Long) {
           commID = (long) input;
-        }
-        else {
+        } else {
           logger.warning("Could not convert comment's ID to long"); 
         }
   
@@ -85,8 +88,7 @@ public class EditDataServlet extends HttpServlet {
           Object objUserLikes = user.getProperty("likes");
           if (objUserLikes instanceof ArrayList) {
             userLikes = (ArrayList<Long>) objUserLikes;
-          }
-          else {
+          } else {
             logger.warning("Could not convert User's likes list to ArrayList<Long>"); 
           }
 
@@ -98,17 +100,14 @@ public class EditDataServlet extends HttpServlet {
               Object likes = comment.getProperty("likes");
               if (likes instanceof Long) {
                 comment.setProperty("likes", ((long) likes) + 1);
-              }
-              else {
+              } else {
                 logger.warning("Could not convert comment's likes to long"); 
               }
-            }
-            else if (type.equals("dislike")) {
+            } else if (type.equals("dislike")) {
               Object dislikes = comment.getProperty("dislikes");
               if (dislikes instanceof Long) {
                 comment.setProperty("dislikes", ((long) dislikes) + 1);
-              }
-              else {
+              } else {
                 logger.warning("Could not convert comment's dislikes to long"); 
               }
             }
