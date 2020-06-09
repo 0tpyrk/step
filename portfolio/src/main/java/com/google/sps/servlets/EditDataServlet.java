@@ -47,12 +47,14 @@ public class EditDataServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn()) {
-      Key key = KeyFactory.createKey("Comment", Long.parseLong(request.getParameter("key")));
+      Key key = 
+          KeyFactory.createKey("Comment", Long.parseLong(request.getParameter("key")));
       String type = request.getParameter("type");
       String userID = userService.getCurrentUser().getUserId();
     
       Query keyQuery = new Query("Comment", key);
-      FilterPredicate filter = new FilterPredicate("id", Query.FilterOperator.EQUAL, userID);
+      FilterPredicate filter = new FilterPredicate("id", 
+          Query.FilterOperator.EQUAL, userID);
       Query userQuery = new Query("User");
       userQuery.setFilter(filter);
 
@@ -88,7 +90,8 @@ public class EditDataServlet extends HttpServlet {
             logger.warning("Could not convert User's likes list to ArrayList<Long>"); 
           }
 
-          // check to make sure user's list of liked comments doesn't have this comment inside of it
+          // check to make sure user's list of liked comments 
+          // doesn't have this comment inside of it
           if (!userLikes.contains(commID)) {
           
             if (type.equals("like")) {

@@ -44,7 +44,8 @@ public class LoginServlet extends HttpServlet {
           userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
 
       // If user has not set a nickname, redirect to nickname page
-      String nickname = NicknameServlet.getUserNickname(userService.getCurrentUser().getUserId());
+      String nickname = 
+          NicknameServlet.getUserNickname(userService.getCurrentUser().getUserId());
       if (nickname == "") {
         response.sendRedirect(String.format("/nickname?url=%1$s", nextURL));
         return;
@@ -58,8 +59,6 @@ public class LoginServlet extends HttpServlet {
       out.println("<div class=\"dropdown-content\">");
       out.println(String.format("<a href=\"%1$s\">Logout</a>", logoutUrl));
       out.println("</div>");
-      
-      
 
     } else {
       // create navbar icon

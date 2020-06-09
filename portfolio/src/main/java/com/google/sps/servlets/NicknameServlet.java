@@ -44,7 +44,8 @@ public class NicknameServlet extends HttpServlet {
       String nextURL = request.getParameter("url");
       out.println("<div id=\"nick\">");
       out.println("<h4>Set your nickname here:</h4>");
-      out.println(String.format("<form method=\"POST\" action=\"/nickname?url=%1$s\">", nextURL));
+      out.println(String.format("<form method=\"POST\" "
+         + "action=\"/nickname?url=%1$s\">", nextURL));
       out.println("<input name=\"nickname\" value=\"" + nickname + "\" />");
       out.println("<br/>");
       out.println("<br/>");
@@ -72,15 +73,16 @@ public class NicknameServlet extends HttpServlet {
     Entity entity = new Entity("User", id);
 
     ArrayList<Long> list = new ArrayList<Long>();
-    // adding intial value to the list, otherwise entity draws NullPointerException later
-    // when taken out of the datastore
+    // adding intial value to the list, otherwise entity draws NullPointerException
+    // later when taken out of the datastore
     long initVal = 0;
     list.add(initVal);
 
     entity.setProperty("id", id);
     entity.setProperty("nickname", nickname);
     entity.setUnindexedProperty("likes", list);
-    // The put() function automatically inserts new data or updates existing data based on ID
+    // The put() function automatically inserts new data or 
+    // updates existing data based on ID
     datastore.put(entity);
 
     String nextURL = request.getParameter("url");
@@ -88,13 +90,15 @@ public class NicknameServlet extends HttpServlet {
   }
 
   /**
-   * Returns the nickname of the user with id, or empty String if the user has not set a nickname.
+   * Returns the nickname of the user with id, or empty String if the user has 
+   * not set a nickname.
    */
   public static String getUserNickname(String id) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query =
         new Query("User")
-            .setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
+            .setFilter(new Query.FilterPredicate("id", 
+            Query.FilterOperator.EQUAL, id));
     PreparedQuery results = datastore.prepare(query);
     Entity entity = results.asSingleEntity();
     if (entity == null) {
