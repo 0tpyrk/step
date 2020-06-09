@@ -28,6 +28,8 @@ import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.sps.data.Comment;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -43,72 +45,75 @@ public class EditDataServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Key key = KeyFactory.createKey("Comment", Long.parseLong(request.getParameter("key")));
-    String type = request.getParameter("type");
-    long userID = Long.parseLong(request.getParameter("id"));
+    UserService userService = UserServiceFactory.getUserService();
+    if (userService.isUserLoggedIn()) {
+      Key key = KeyFactory.createKey("Comment", Long.parseLong(request.getParameter("key")));
+      String type = request.getParameter("type");
+      String userID = userService.getCurrentUser().getUserId();
     
-    Query keyQuery = new Query("Comment", key);
-    FilterPredicate filter = new FilterPredicate("id", Query.FilterOperator.EQUAL, userID);
-    Query idQuery = new Query("ID");
-    idQuery.setFilter(filter);
+      Query keyQuery = new Query("Comment", key);
+      FilterPredicate filter = new FilterPredicate("id", Query.FilterOperator.EQUAL, userID);
+      Query userQuery = new Query("User");
+      userQuery.setFilter(filter);
 
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-    // PreparedQuery that contains all the comments inside it
-    PreparedQuery commResults = datastore.prepare(keyQuery);
-    // PreparedQuery that has the user who liked the comment inside it
-    PreparedQuery userResults = datastore.prepare(idQuery);
+      // PreparedQuery that contains all the comments inside it
+      PreparedQuery commResults = datastore.prepare(keyQuery);
+      // PreparedQuery that has the user who liked the comment inside it
+      PreparedQuery userResults = datastore.prepare(userQuery);
 
-    // Create Logger for warning reporting
-    Logger logger = Logger.getLogger(EditDataServlet.class.getName());
-    logger.setLevel(Level.WARNING); 
+      // Create Logger for warning reporting
+      Logger logger = Logger.getLogger(EditDataServlet.class.getName());
+      logger.setLevel(Level.WARNING); 
 
-    for (Entity comment : commResults.asIterable()) {
-      // Get comment's id
-      Object input = comment.getKey().getId();
-      long commID = 0;
-      if (input instanceof Long) {
-        commID = (long) input;
-      }
-      else {
-        logger.warning("Could not convert comment's ID to long"); 
-      }
-
-      for (Entity user : userResults.asIterable()) {
-        ArrayList<Long> userLikes = null;
-        Object objUserLikes = user.getProperty("likes");
-        if (objUserLikes instanceof ArrayList) {
-            userLikes = (ArrayList<Long>) objUserLikes;
+      for (Entity comment : commResults.asIterable()) {
+        // Get comment's id
+        Object input = comment.getKey().getId();
+        long commID = 0;
+        if (input instanceof Long) {
+          commID = (long) input;
         }
         else {
-            logger.warning("Could not convert User's likes list to ArrayList<Long>"); 
+          logger.warning("Could not convert comment's ID to long"); 
         }
+  
+        for (Entity user : userResults.asIterable()) {
+          ArrayList<Long> userLikes = null;
+          Object objUserLikes = user.getProperty("likes");
+          if (objUserLikes instanceof ArrayList) {
+            userLikes = (ArrayList<Long>) objUserLikes;
+          }
+          else {
+            logger.warning("Could not convert User's likes list to ArrayList<Long>"); 
+          }
 
-        // check to make sure user's list of liked comments doesn't have this comment inside of it
-        if (!userLikes.contains(commID)) {
+          // check to make sure user's list of liked comments doesn't have this comment inside of it
+          if (!userLikes.contains(commID)) {
           
-          if (type.equals("like")) {
-            Object likes = comment.getProperty("likes");
-            if (likes instanceof Long) {
-              comment.setProperty("likes", ((long) likes) + 1);
+            if (type.equals("like")) {
+              Object likes = comment.getProperty("likes");
+              if (likes instanceof Long) {
+                comment.setProperty("likes", ((long) likes) + 1);
+              }
+              else {
+                logger.warning("Could not convert comment's likes to long"); 
+              }
             }
-            else {
-              logger.warning("Could not convert comment's likes to long"); 
+            else if (type.equals("dislike")) {
+              Object dislikes = comment.getProperty("dislikes");
+              if (dislikes instanceof Long) {
+                comment.setProperty("dislikes", ((long) dislikes) + 1);
+              }
+              else {
+                logger.warning("Could not convert comment's dislikes to long"); 
+              }
             }
+            userLikes.add(commID);
+            user.setProperty("likes", userLikes);
+            datastore.put(user);
+            datastore.put(comment);
           }
-          else if (type.equals("dislike")) {
-            Object dislikes = comment.getProperty("dislikes");
-            if (dislikes instanceof Long) {
-              comment.setProperty("dislikes", ((long) dislikes) + 1);
-            }
-            else {
-              logger.warning("Could not convert comment's dislikes to long"); 
-            }
-          }
-          userLikes.add(commID);
-          user.setProperty("likes", userLikes);
-          datastore.put(user);
-          datastore.put(comment);
         }
       }
     }

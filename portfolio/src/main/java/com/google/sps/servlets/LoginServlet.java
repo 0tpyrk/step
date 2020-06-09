@@ -35,15 +35,30 @@ public class LoginServlet extends HttpServlet {
     if (userService.isUserLoggedIn()) {
       // create navbar icon
       String userEmail = userService.getCurrentUser().getEmail();
+      // by default identify user by their email
+      String user = userEmail;
       String urlToRedirectToAfterUserLogsOut = "/";
       String logoutUrl =
           userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
 
+      // If user has not set a nickname, redirect to nickname page
+      String nickname = NicknameServlet.getUserNickname(userService.getCurrentUser().getUserId());
+      if (nickname == "") {
+        response.sendRedirect("/nickname");
+        return;
+      } else {
+        // if they have, use it to identify them
+        user = nickname;
+      }
+
       out.println(String.format("<button class=\"dropbtn\">%1$s</button>",
-          userEmail));
+          user));
       out.println("<div class=\"dropdown-content\">");
       out.println(String.format("<a href=\"%1$s\">Logout</a>", logoutUrl));
       out.println("</div>");
+      
+      
+
     } else {
       // create navbar icon
       String urlToRedirectToAfterUserLogsIn = "/";

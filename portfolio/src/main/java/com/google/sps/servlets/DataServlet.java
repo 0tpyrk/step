@@ -24,6 +24,8 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.sps.data.Comment;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -138,13 +140,17 @@ public class DataServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the input from the form.
-    String user = getParameter(request, "username", "");
-    String text = getParameter(request, "text-input", "");
+    UserService userService = UserServiceFactory.getUserService();
+    if (userService.isUserLoggedIn()) {
+      String user = NicknameServlet.getUserNickname(userService.getCurrentUser().getUserId());
+      String userID = userService.getCurrentUser().getUserId();
+      String text = getParameter(request, "text-input", "");
 
     long timestamp = System.currentTimeMillis();
 
     Entity commentEntity = new Entity("Comment");
     commentEntity.setProperty("user", user);
+    commentEntity.setProperty("userID", userID);
     commentEntity.setProperty("text", text);
     commentEntity.setProperty("timestamp", timestamp);
     commentEntity.setProperty("likes", 0);
@@ -156,6 +162,8 @@ public class DataServlet extends HttpServlet {
 
 	// Refresh the page
     response.sendRedirect("/index.html");
+    }
+    
   }
 
   /**
