@@ -196,11 +196,9 @@ async function deleteComments() {
 }
 
 function editComment(key, type) {
-  getID().then((response) => {
-      fetch('/edit-data' + '?' + 'key=' + key + "&type=" + type + '&id=' + 
-      response, {method: 'POST'}).then(() => {
-      getComments()})
-      });
+  fetch('/edit-data' + '?' + 'key=' + key + "&type=" + type,
+      {method: 'POST'}).then(() => {
+      getComments()});
 }
 
 function getTimeSince(time) {
@@ -242,6 +240,7 @@ function getTimeSince(time) {
   return "";
 }
 
+// deprecated
 async function getID() {
   var id = getCookie('id');
   if (id == '') {
@@ -253,8 +252,8 @@ async function getID() {
   return id;
 }
 
-async function getLogin() {
-  const response = await fetch('/login');
+async function getLogin(url) {
+  const response = await fetch('/login' + '?' + 'url=' + url);
   const html = await response.text();
   const navbarSlot = document.getElementById('login');
   navbarSlot.innerHTML = html;

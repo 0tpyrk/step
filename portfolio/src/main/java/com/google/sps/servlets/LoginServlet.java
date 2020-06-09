@@ -26,6 +26,10 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
+  /** 
+   *  Displays the login status of the user, and handles login/logout
+   *  requests
+   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("text/html");
@@ -35,18 +39,35 @@ public class LoginServlet extends HttpServlet {
     if (userService.isUserLoggedIn()) {
       // create navbar icon
       String userEmail = userService.getCurrentUser().getEmail();
-      String urlToRedirectToAfterUserLogsOut = "/";
+      // by default identify user by their email
+      String user = userEmail;
+      String nextURL = request.getParameter("url");
+      String urlToRedirectToAfterUserLogsOut = 
+          String.format("/%1$s.html" , nextURL);
       String logoutUrl =
           userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
 
+      // If user has not set a nickname, redirect to nickname page
+      String nickname = 
+          NicknameServlet.getUserNickname(userService.getCurrentUser().getUserId());
+      if (nickname == "") {
+        response.sendRedirect(String.format("/nickname?url=%1$s", nextURL));
+        return;
+      } else {
+        // if they have, use it to identify them
+        user = nickname;
+      }
+
       out.println(String.format("<button class=\"dropbtn\">%1$s</button>",
-          userEmail));
+          user));
       out.println("<div class=\"dropdown-content\">");
       out.println(String.format("<a href=\"%1$s\">Logout</a>", logoutUrl));
       out.println("</div>");
+
     } else {
       // create navbar icon
-      String urlToRedirectToAfterUserLogsIn = "/";
+      String urlToRedirectToAfterUserLogsIn = 
+          String.format("/%1$s.html" , request.getParameter("url"));
       String loginUrl =
           userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
 

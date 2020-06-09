@@ -115,6 +115,11 @@ nav .active {
   display: block;
 }
 
+#nick {
+  background-color: #fffef2;
+  padding: 10px 10px;
+}
+
 .page-title {
   padding: 10px;
   padding-left: 20px;

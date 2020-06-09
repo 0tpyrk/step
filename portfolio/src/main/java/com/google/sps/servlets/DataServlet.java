@@ -24,6 +24,8 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.sps.data.Comment;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -37,9 +39,14 @@ import java.util.logging.Level;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
+  /** 
+   *  Displays comments in the comments section after retrieving them from
+   *  the datastore
+   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+    Query query =
+        new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
 
     int numComments = getNumComments(request);
 
@@ -62,8 +69,7 @@ public class DataServlet extends HttpServlet {
       long id = 0;
       if (input instanceof Long) {
         id = (long) input;
-      }
-      else {
+      } else {
         logger.warning("Could not convert Entity's ID to long"); 
       }
 
@@ -74,8 +80,7 @@ public class DataServlet extends HttpServlet {
       long timestamp = 0;
       if (input instanceof Long) {
         timestamp = (long) input;
-      }
-      else {
+      } else {
         logger.warning("Could not convert Entity's timestamp to long"); 
       }
 
@@ -83,8 +88,7 @@ public class DataServlet extends HttpServlet {
       long likes = 0;
       if (input instanceof Long) {
         likes = (long) input;
-      }
-      else {
+      } else {
         logger.warning("Could not convert Entity's likes to long"); 
       }
 
@@ -92,12 +96,13 @@ public class DataServlet extends HttpServlet {
       long dislikes = 0;
       if (input instanceof Long) {
         dislikes = (long) input;
-      }
-      else {
+      } else {
         logger.warning("Could not convert Entity's dislikes to long"); 
       }
       
-      Comment comment = new Comment(id, user, text, timestamp, likes, dislikes);
+      // TODO: implement Builder pattern
+      Comment comment =
+          new Comment(id, user, text, timestamp, likes, dislikes);
       comments.add(comment);
       
       count++;
@@ -109,7 +114,10 @@ public class DataServlet extends HttpServlet {
     response.getWriter().println(json);
   }
 
-  /** Returns the number of comments to display entered by the user, or -1 if the choice was invalid. */
+  /** 
+   *  Returns the number of comments to display entered by the user, 
+   *  or -1 if the choice was invalid.
+   */
   private int getNumComments(HttpServletRequest request) {
     // Get the input from the form.
     String numCommentsString = request.getParameter("num-comments");
@@ -135,27 +143,37 @@ public class DataServlet extends HttpServlet {
     return json;
   }
 
+  /** 
+   *  Handles the creation of a new comment using user input
+   *  from the form on the index page
+   */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the input from the form.
-    String user = getParameter(request, "username", "");
-    String text = getParameter(request, "text-input", "");
+    UserService userService = UserServiceFactory.getUserService();
+    if (userService.isUserLoggedIn()) {
+      String user = 
+          NicknameServlet.getUserNickname(userService.getCurrentUser().getUserId());
+      String userID = userService.getCurrentUser().getUserId();
+      String text = getParameter(request, "text-input", "");
 
-    long timestamp = System.currentTimeMillis();
+      long timestamp = System.currentTimeMillis();
 
-    Entity commentEntity = new Entity("Comment");
-    commentEntity.setProperty("user", user);
-    commentEntity.setProperty("text", text);
-    commentEntity.setProperty("timestamp", timestamp);
-    commentEntity.setProperty("likes", 0);
-    commentEntity.setProperty("dislikes", 0);
+      Entity commentEntity = new Entity("Comment");
+      commentEntity.setProperty("user", user);
+      commentEntity.setProperty("userID", userID);
+      commentEntity.setProperty("text", text);
+      commentEntity.setProperty("timestamp", timestamp);
+      commentEntity.setProperty("likes", 0);
+      commentEntity.setProperty("dislikes", 0);
 
-    // Add comment to datastore
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    datastore.put(commentEntity);
+      // Add comment to datastore
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      datastore.put(commentEntity);
 
-	// Refresh the page
-    response.sendRedirect("/index.html");
+      // Refresh the page
+      response.sendRedirect("/index.html");
+    }
   }
 
   /**
