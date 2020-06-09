@@ -37,14 +37,16 @@ public class LoginServlet extends HttpServlet {
       String userEmail = userService.getCurrentUser().getEmail();
       // by default identify user by their email
       String user = userEmail;
-      String urlToRedirectToAfterUserLogsOut = "/";
+      String nextURL = request.getParameter("url");
+      String urlToRedirectToAfterUserLogsOut = 
+          String.format("/%1$s.html" , nextURL);
       String logoutUrl =
           userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
 
       // If user has not set a nickname, redirect to nickname page
       String nickname = NicknameServlet.getUserNickname(userService.getCurrentUser().getUserId());
       if (nickname == "") {
-        response.sendRedirect("/nickname");
+        response.sendRedirect(String.format("/nickname?url=%1$s", nextURL));
         return;
       } else {
         // if they have, use it to identify them
@@ -61,7 +63,8 @@ public class LoginServlet extends HttpServlet {
 
     } else {
       // create navbar icon
-      String urlToRedirectToAfterUserLogsIn = "/";
+      String urlToRedirectToAfterUserLogsIn = 
+          String.format("/%1$s.html" , request.getParameter("url"));
       String loginUrl =
           userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
 

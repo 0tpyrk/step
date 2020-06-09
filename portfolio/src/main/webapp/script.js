@@ -252,8 +252,8 @@ async function getID() {
   return id;
 }
 
-async function getLogin() {
-  const response = await fetch('/login');
+async function getLogin(url) {
+  const response = await fetch('/login' + '?' + 'url=' + url);
   const html = await response.text();
   const navbarSlot = document.getElementById('login');
   navbarSlot.innerHTML = html;
