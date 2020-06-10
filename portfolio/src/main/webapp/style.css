@@ -249,6 +249,8 @@ nav .active {
 #other-photos {
   background-color: #ff9aa2;
   padding: 10px;
+  min-height: 300px;
+  text-align: center;
 }
 
 .image-thumbnails img {
