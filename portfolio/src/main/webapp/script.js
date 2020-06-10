@@ -268,7 +268,26 @@ async function getCommentsForm() {
 
 /** Creates a map and adds it to the page. */
 function createMap() {
+  // lay out all the locations
+  var locArray = [];
+  let theboys = locArray.push({lat: 37.750931, lng: -121.954878});
+  let hazel = locArray.push({lat: 45.448673, lng:  -122.669502});
+  let zach = locArray.push({lat: 45.448670, lng: -122.669518});
+  let nin = locArray.push({lat: 45.448678, lng: -122.669518});
+  let mist = locArray.push({lat: 37.763465, lng: -121.959294});
+  let st = locArray.push({lat: 32.7077161, lng: -117.1604850});
+  let sunset = locArray.push({lat: 37.734854, lng: -121.921460});
+  let timeslikethese = locArray.push({lat: 37.747452, lng: -121.437607});
+  let snow = locArray.push({lat: 39.339379, lng: -120.247639});
+  let sf = locArray.push({lat: 37.803685, lng: -122.430087});
+  
+  // make the map itself, centered so that all the markers are visible
   const map = new google.maps.Map(
       document.getElementById('map'),
-      {center: {lat: 37.422, lng: -122.084}, zoom: 16});
+      {center: {lat: 40.149494, lng: -120.765521}, zoom: 5});
+
+  // make a marker for each location
+  locArray.forEach(loc => {
+    var marker = new google.maps.Marker({position: loc, map: map});
+  });
 }
