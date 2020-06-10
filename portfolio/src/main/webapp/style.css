@@ -274,6 +274,10 @@ nav .active {
   width: 500px;
 }
 
+#infowindow img {
+  max-width: 350px;
+}
+
 
 /* ABOUT ME */
 #about-me {
