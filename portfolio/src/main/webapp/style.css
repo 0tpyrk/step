@@ -224,6 +224,10 @@ nav .active {
   float: right;
 }
 
+#comments-section a {
+  color: pink;
+}
+
 #comments-section a:visited {
   color: pink;
 }

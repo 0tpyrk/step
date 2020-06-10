@@ -260,7 +260,7 @@ async function getLogin(url) {
 }
 
 async function getCommentsForm() {
-  const response = await fetch('/form');
+  const response = await fetch('/comment-form');
   const html = await response.text();
   const comments = document.getElementById('comment-submission');
   comments.innerHTML = html;

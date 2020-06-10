@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/form")
+@WebServlet("/comment-form")
 public class FormServlet extends HttpServlet {
 
   /** 
