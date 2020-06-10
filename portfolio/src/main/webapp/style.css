@@ -224,6 +224,10 @@ nav .active {
   float: right;
 }
 
+#comments-section a {
+  color: pink;
+}
+
 #comments-section a:visited {
   color: pink;
 }
@@ -249,6 +253,8 @@ nav .active {
 #other-photos {
   background-color: #ff9aa2;
   padding: 10px;
+  min-height: 300px;
+  text-align: center;
 }
 
 .image-thumbnails img {
@@ -272,6 +278,10 @@ nav .active {
   border: thin solid black;
   height: 500px;
   width: 500px;
+}
+
+#infowindow img {
+  max-width: 350px;
 }
 
 

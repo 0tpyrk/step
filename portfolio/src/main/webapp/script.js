@@ -260,7 +260,7 @@ async function getLogin(url) {
 }
 
 async function getCommentsForm() {
-  const response = await fetch('/form');
+  const response = await fetch('/comment-form');
   const html = await response.text();
   const comments = document.getElementById('comment-submission');
   comments.innerHTML = html;
@@ -277,34 +277,64 @@ function createMap() {
   var locArray = [];
   let theboys = locArray.push(
       new Location({lat: 37.750931, lng: -121.954878},
-      "Temp"));
+      '<div id="infowindow">'+
+      '<h3>San Ramon, CA</h1>'+
+      '<a href="images/fullsize/theboys.jpg"><img src="images/resized/theboys_r.jpg"/></a>'+
+      '</div>'));
   let hazel = locArray.push(
       new Location({lat: 45.448673, lng:  -122.669502},
-      "Temp"));
+      '<div id="infowindow">'+
+      '<h3>Platt Hall, Lewis & Clark College - Portland, OR</h1>'+
+      '<a href="images/fullsize/hazel.jpg"><img src="images/resized/hazel_r.jpg"/></a>'+
+      '</div>'));
   let zach = locArray.push(
       new Location({lat: 45.448670, lng: -122.669518},
-      "Temp"));
+      '<div id="infowindow">'+
+      '<h3>Platt Hall, Lewis & Clark College - Portland, OR</h1>'+
+      '<a href="images/fullsize/zach.jpg"><img src="images/resized/zach_r.jpg"/></a>'+
+      '</div>'));
   let nin = locArray.push(
       new Location({lat: 45.448678, lng: -122.669518},
-      "Temp"));
+      '<div id="infowindow">'+
+      '<h3>Platt Hall, Lewis & Clark College - Portland, OR</h1>'+
+      '<a href="images/fullsize/nin.jpg"><img src="images/resized/nin_r.jpg"/></a>'+
+      '</div>'));
   let mist = locArray.push(
       new Location({lat: 37.763465, lng: -121.959294},
-      "Temp"));
+      '<div id="infowindow">'+
+      '<h3>City Center Bishop Ranch - San Ramon, CA</h1>'+
+      '<a href="images/fullsize/mist.jpg"><img src="images/resized/mist_r.jpg"/></a>'+
+      '</div>'));
   let st = locArray.push(
       new Location({lat: 32.7077161, lng: -117.1604850},
-      "Temp"));
+      '<div id="infowindow">'+
+      '<h3>The Netflix Experience - San Diego, CA</h1>'+
+      '<a href="images/fullsize/st.jpg"><img src="images/resized/st_r.jpg"/></a>'+
+      '</div>'));
   let sunset = locArray.push(
       new Location({lat: 37.734854, lng: -121.921460},
-      "Temp"));
+      '<div id="infowindow">'+
+      '<h3>Old Ranch Park - San Ramon, CA</h1>'+
+      '<a href="images/fullsize/sunset.jpg"><img src="images/resized/sunset_r.jpg"/></a>'+
+      '</div>'));
   let timeslikethese = locArray.push(
       new Location({lat: 37.747452, lng: -121.437607},
-     "Temp"));
+      '<div id="infowindow">'+
+      '<h3>Dr. Powers Park - Tracy, CA</h1>'+
+      '<a href="images/fullsize/timeslikethese.jpg"><img src="images/resized/timeslikethese_r.jpg"/></a>'+
+      '</div>'));
   let snow = locArray.push(
       new Location({lat: 39.339379, lng: -120.247639},
-      "Temp"));
+      '<div id="infowindow">'+
+      '<h3>Truckee, CA</h1>'+
+      '<a href="images/fullsize/snow.jpg"><img src="images/resized/snow_r.jpg"/></a>'+
+      '</div>'));
   let sf = locArray.push(
       new Location({lat: 37.803685, lng: -122.430087},
-      "Temp"));
+      '<div id="infowindow">'+
+      '<h3>Great Meadow Park at Fort Mason - San Francisco, CA</h1>'+
+      '<a href="images/fullsize/sf.jpg"><img src="images/resized/sf_r.jpg"/></a>'+
+      '</div>'));
   
   // make the map itself, centered so that all the markers are visible
   const map = new google.maps.Map(
@@ -314,5 +344,13 @@ function createMap() {
   // make a marker for each location
   locArray.forEach(location => {
     var marker = new google.maps.Marker({position: location.loc, map: map});
+
+    var infowindow = new google.maps.InfoWindow({
+      content: location.content
+    });
+
+    marker.addListener('click', function() {
+      infowindow.open(map, marker);
+    });
   });
 }
