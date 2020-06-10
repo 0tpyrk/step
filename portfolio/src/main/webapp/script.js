@@ -265,3 +265,54 @@ async function getCommentsForm() {
   const comments = document.getElementById('comment-submission');
   comments.innerHTML = html;
 }
+
+function Location(loc, content) {
+  this.loc = loc;
+  this.content = content;
+}
+
+/** Creates a map and adds it to the page. */
+function createMap() {
+  // lay out all the locations
+  var locArray = [];
+  let theboys = locArray.push(
+      new Location({lat: 37.750931, lng: -121.954878},
+      "Temp"));
+  let hazel = locArray.push(
+      new Location({lat: 45.448673, lng:  -122.669502},
+      "Temp"));
+  let zach = locArray.push(
+      new Location({lat: 45.448670, lng: -122.669518},
+      "Temp"));
+  let nin = locArray.push(
+      new Location({lat: 45.448678, lng: -122.669518},
+      "Temp"));
+  let mist = locArray.push(
+      new Location({lat: 37.763465, lng: -121.959294},
+      "Temp"));
+  let st = locArray.push(
+      new Location({lat: 32.7077161, lng: -117.1604850},
+      "Temp"));
+  let sunset = locArray.push(
+      new Location({lat: 37.734854, lng: -121.921460},
+      "Temp"));
+  let timeslikethese = locArray.push(
+      new Location({lat: 37.747452, lng: -121.437607},
+     "Temp"));
+  let snow = locArray.push(
+      new Location({lat: 39.339379, lng: -120.247639},
+      "Temp"));
+  let sf = locArray.push(
+      new Location({lat: 37.803685, lng: -122.430087},
+      "Temp"));
+  
+  // make the map itself, centered so that all the markers are visible
+  const map = new google.maps.Map(
+      document.getElementById('map'),
+      {center: {lat: 40.149494, lng: -120.765521}, zoom: 5});
+
+  // make a marker for each location
+  locArray.forEach(location => {
+    var marker = new google.maps.Marker({position: location.loc, map: map});
+  });
+}
