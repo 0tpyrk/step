@@ -224,11 +224,11 @@ nav .active {
   float: right;
 }
 
-#comments-section a {
+#comments-section a#login-link {
   color: pink;
 }
 
-#comments-section a:visited {
+#comments-section a:visited#login-link {
   color: pink;
 }
 

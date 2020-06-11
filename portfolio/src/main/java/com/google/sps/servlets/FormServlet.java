@@ -57,7 +57,7 @@ public class FormServlet extends HttpServlet {
     } else {
       String loginUrl = userService.createLoginURL("/");
       out.println(String.format("<p>To leave a comment, login <a href=\"%1$s"
-          + "\">here</a>.</p>", loginUrl));
+          + "\" id=\"login-link\">here</a>.</p>", loginUrl));
     }
   }
 }
