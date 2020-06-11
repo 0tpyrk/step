@@ -102,7 +102,6 @@ function setHouse(house) {
  */
 function toStringHouse(tag) {
   output = "";
-  console.log(tag);
   if (tag != "") {
     switch(tag) {
       case 'g':
