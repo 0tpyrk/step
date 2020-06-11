@@ -92,17 +92,10 @@ public class NicknameServlet extends HttpServlet {
     // Create Logger for warning reporting
     Logger logger = Logger.getLogger(HouseServlet.class.getName());
     logger.setLevel(Level.WARNING); 
-
+  
     Entity user = userResults.asSingleEntity();
-    Object input = user.getProperty("nickname");
-    String nickname = "";
-    if (input instanceof String) {
-      nickname = input.toString();
-    } else {
-      logger.warning("Could not convert User's nickname to String"); 
-    }
-    
-    if (!nickname.equals("")) {
+
+    if (user != null) {
       user.setProperty("nickname", request.getParameter("nickname"));
       datastore.put(user);
     } else {
