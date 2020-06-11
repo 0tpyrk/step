@@ -100,15 +100,20 @@ public class DataServlet extends HttpServlet {
         logger.warning("Could not convert Entity's dislikes to long"); 
       }
       
-      // TODO: implement Builder pattern
-      Comment comment =
-          new Comment(id, user, text, timestamp, likes, dislikes);
+      Comment comment = new Comment();
+      comment.setID(id);
+      comment.setUser(user);
+      comment.setText(text);
+      comment.setTimestamp(timestamp);
+      comment.setLikes(likes);
+      comment.setDislikes(dislikes);
+
       comments.add(comment);
       
       count++;
     }
 
-    String json = convertToJson(comments);
+    String json = Utility.convertToJson(comments);
 
     response.setContentType("application/json;");
     response.getWriter().println(json);
@@ -134,15 +139,6 @@ public class DataServlet extends HttpServlet {
     return numComments;
   }
 
-  /**
-   * Converts a List instance into a JSON string using the Gson library.
-   */
-  private String convertToJson(List arr) {
-    Gson gson = new Gson();
-    String json = gson.toJson(arr);
-    return json;
-  }
-
   /** 
    *  Handles the creation of a new comment using user input
    *  from the form on the index page
@@ -155,7 +151,7 @@ public class DataServlet extends HttpServlet {
       String user = 
           NicknameServlet.getUserNickname(userService.getCurrentUser().getUserId());
       String userID = userService.getCurrentUser().getUserId();
-      String text = getParameter(request, "text-input", "");
+      String text = Utility.getParameter(request, "text-input", "");
 
       long timestamp = System.currentTimeMillis();
 
@@ -174,17 +170,5 @@ public class DataServlet extends HttpServlet {
       // Refresh the page
       response.sendRedirect("/index.html");
     }
-  }
-
-  /**
-   * @return the request parameter, or the default value if the parameter
-   *         was not specified by the client
-   */
-  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
-    String value = request.getParameter(name);
-    if (value == null) {
-      return defaultValue;
-    }
-    return value;
   }
 }

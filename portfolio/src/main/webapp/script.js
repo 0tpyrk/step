@@ -141,8 +141,9 @@ form.addEventListener("submit", function(event) {
   houseContainer.innerText = "You are a " + toStringHouse(output) + "!";
   
   // update navbar
-  checkCookie();
-  
+  //checkCookie();
+  getHouse();
+
   event.preventDefault();
 }, false);
 

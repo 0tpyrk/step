@@ -17,19 +17,35 @@ package com.google.sps.data;
 /** An item on a todo list. */
 public final class Comment {
 
-  private final long id;
-  private final String user;
-  private final String text;
-  private final long timestamp;
-  private final long likes;
-  private final long dislikes;
+  private long id;
+  private String user;
+  private String text;
+  private long timestamp;
+  private long likes;
+  private long dislikes;
 
-  public Comment(long id, String user, String text, long timestamp, long likes, long dislikes) {
+  public void setID(long id) {
     this.id = id;
+  }
+  
+  public void setUser(String user) {
     this.user = user;
+  }
+
+  public void setText(String text) {
     this.text = text;
+  }
+
+  public void setTimestamp(long timestamp) {
     this.timestamp = timestamp;
+  }
+
+  public void setLikes(long likes) {
     this.likes = likes;
+  }
+
+  public void setDislikes(long dislikes) {
     this.dislikes = dislikes;
   }
+  
 }

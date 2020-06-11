@@ -80,30 +80,9 @@ public class IDDataServlet extends HttpServlet {
     // Add person to datastore
     datastore.put(idEntity);
 
-    String json = convertToJson(idEntity);
+    String json = Utility.convertToJson(idEntity);
 
     response.setContentType("application/json;");
     response.getWriter().println(json);
-  }
-
-  /**
-   * Converts a Entity instance into a JSON string using the Gson library.
-   */
-  private String convertToJson(Entity e) {
-    Gson gson = new Gson();
-    String json = gson.toJson(e);
-    return json;
-  }
-
-  /**
-   * @return the request parameter, or the default value if the parameter
-   *         was not specified by the client
-   */
-  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
-    String value = request.getParameter(name);
-    if (value == null) {
-      return defaultValue;
-    }
-    return value;
   }
 }
