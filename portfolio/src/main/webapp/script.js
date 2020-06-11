@@ -72,6 +72,7 @@ function getCookie(cname) {
 
 /**
  * Updates navbar with house based off cookie
+ * DEPRECATED
  */
 function checkCookie() {
   var house = toStringHouse(getCookie("house"));
@@ -81,10 +82,27 @@ function checkCookie() {
 }
 
 /**
+ * Updates navbar with house based off datastore
+ */
+async function getHouse() {
+  const response = await fetch('/house');
+  const houseID = await response.text();
+  var house = toStringHouse(houseID[0]);
+  var elements = document.getElementsByClassName("house-navbar");
+  elements[0].id = house.toLowerCase();
+  elements[0].innerText = house;
+}
+
+function setHouse(house) {
+  fetch('/house' + '?' + 'house=' + house, {method: 'POST'});
+}
+
+/**
  * Turns letter tag into corresponding house name
  */
 function toStringHouse(tag) {
   output = "";
+  console.log(tag);
   if (tag != "") {
     switch(tag) {
       case 'g':
@@ -116,7 +134,8 @@ form.addEventListener("submit", function(event) {
     output = entry[1];
   };
 
-  setCookie("house", output);
+  //setCookie("house", output);
+  setHouse(output);
 
   // print message
   const houseContainer = document.getElementById('house-container');
