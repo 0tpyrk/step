@@ -88,6 +88,7 @@ public class NicknameServlet extends HttpServlet {
     entity.setProperty("id", id);
     entity.setProperty("nickname", nickname);
     entity.setUnindexedProperty("likes", list);
+    entity.setUnindexedProperty("dislikes", list);
     entity.setProperty("house", "");
     // The put() function automatically inserts new data or 
     // updates existing data based on ID
