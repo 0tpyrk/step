@@ -37,8 +37,7 @@ import java.util.logging.Level;
 public class HouseServlet extends HttpServlet {
 
   /** 
-   *  Displays the login status of the user, and handles login/logout
-   *  requests
+   *  Returns the house of the given user
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -78,8 +77,7 @@ public class HouseServlet extends HttpServlet {
   }
 
   /** 
-   *  Handles responses to nickname form and creates new users 
-   *  for the datastore
+   *  Sets the house for a given user
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
