@@ -24,6 +24,8 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.sps.data.Comment;
@@ -73,7 +75,7 @@ public class DataServlet extends HttpServlet {
         logger.warning("Could not convert Entity's ID to long"); 
       }
 
-      String user = entity.getProperty("user").toString();
+      String userNickname = entity.getProperty("user").toString();
       String text = entity.getProperty("text").toString();
 
       input = entity.getProperty("timestamp");
@@ -102,12 +104,33 @@ public class DataServlet extends HttpServlet {
       
       Comment comment = new Comment();
       comment.setID(id);
-      comment.setUser(user);
+      comment.setUser(userNickname);
       comment.setText(text);
       comment.setTimestamp(timestamp);
       comment.setLikes(likes);
       comment.setDislikes(dislikes);
 
+      // set house for comment
+      String userID = entity.getProperty("userID").toString();
+      FilterPredicate filter = new FilterPredicate("id", 
+          Query.FilterOperator.EQUAL, userID);
+      Query userQuery = new Query("User");
+      userQuery.setFilter(filter);
+
+      PreparedQuery userResults = datastore.prepare(userQuery);
+      
+      for (Entity user : userResults.asIterable()) {
+        input = user.getProperty("house");
+        String house = "";
+        if (input instanceof String) {
+          house = input.toString();
+        } else {
+          logger.warning("Could not convert User's house to String"); 
+        }
+
+        comment.setHouse(house);
+      }
+      
       comments.add(comment);
       
       count++;

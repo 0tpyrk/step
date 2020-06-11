@@ -23,6 +23,7 @@ public final class Comment {
   private long timestamp;
   private long likes;
   private long dislikes;
+  private String house;
 
   public void setID(long id) {
     this.id = id;
@@ -48,4 +49,7 @@ public final class Comment {
     this.dislikes = dislikes;
   }
   
+  public void setHouse(String house) {
+    this.house = house;
+  }
 }

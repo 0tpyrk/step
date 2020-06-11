@@ -160,8 +160,9 @@ async function getComments() {
     const liElement = document.createElement('li');
 
     const headerElement = document.createElement('div');
-    headerElement.innerHTML = comm.user.bold() + ', ' 
-        + getTimeSince(comm.timestamp);
+    headerElement.innerHTML = comm.user.bold() + ' ';
+    headerElement.appendChild(createHouseElement(comm.house));
+    headerElement.appendChild(document.createTextNode(', ' + getTimeSince(comm.timestamp)));
     liElement.appendChild(headerElement);
 
     const likesElement = createLikesButtons(comm);
@@ -207,6 +208,17 @@ function createLikesButtons(comm) {
   likesElement.appendChild(dislikeButton);
   
   return likesElement;
+}
+
+/**
+ * Creates a formatted flag for a commenter's house
+ */
+function createHouseElement(houseInput) {
+  var house = toStringHouse(houseInput);
+  var houseElement = document.createElement('a');
+  houseElement.id = house.toLowerCase();
+  houseElement.innerHTML = '&nbsp;&nbsp;' + house[0] + '&nbsp;&nbsp;';
+  return houseElement;
 }
 
 async function deleteComments() {
