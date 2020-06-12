@@ -71,17 +71,6 @@ function getCookie(cname) {
 }
 
 /**
- * Updates navbar with house based off cookie
- * DEPRECATED
- */
-function checkCookie() {
-  var house = toStringHouse(getCookie("house"));
-  var elements = document.getElementsByClassName("house-navbar");
-  elements[0].id = house.toLowerCase();
-  elements[0].innerText = house;
-}
-
-/**
  * Updates navbar with house based off datastore
  */
 async function getHouse() {
@@ -133,7 +122,6 @@ form.addEventListener("submit", function(event) {
     output = entry[1];
   };
 
-  //setCookie("house", output);
   setHouse(output);
 
   // print message
@@ -141,7 +129,6 @@ form.addEventListener("submit", function(event) {
   houseContainer.innerText = "You are a " + toStringHouse(output) + "!";
   
   // update navbar
-  //checkCookie();
   getHouse();
 
   event.preventDefault();
@@ -160,9 +147,12 @@ async function getComments() {
     const liElement = document.createElement('li');
 
     const headerElement = document.createElement('div');
-    headerElement.innerHTML = comm.user.bold() + ' ';
+    headerElement.innerHTML = comm.user.bold();
+    // add space between name and house flag
+    if (comm.house != '') headerElement.appendChild(document.createTextNode(' '));
     headerElement.appendChild(createHouseElement(comm.house));
-    headerElement.appendChild(document.createTextNode(', ' + getTimeSince(comm.timestamp)));
+    headerElement.appendChild(document.createTextNode(', ' + 
+        getTimeSince(comm.timestamp)));
     liElement.appendChild(headerElement);
 
     const likesElement = createLikesButtons(comm);
@@ -216,22 +206,34 @@ function createLikesButtons(comm) {
 function createHouseElement(houseInput) {
   var house = toStringHouse(houseInput);
   var houseElement = document.createElement('a');
-  houseElement.id = house.toLowerCase();
-  houseElement.innerHTML = '&nbsp;&nbsp;' + house[0] + '&nbsp;&nbsp;';
+  if (house != '') {
+    houseElement.id = house.toLowerCase();
+    houseElement.innerHTML = '&nbsp;&nbsp;' + house[0] + '&nbsp;&nbsp;';
+  }
+  
   return houseElement;
 }
 
+/**
+ * Deletes all comments
+ */
 async function deleteComments() {
   const response = await fetch('/delete-data', {method: 'POST'});
   getComments();
 }
 
+/**
+ * Edits the data of a comment (currently likes or dislikes)
+ */
 function editComment(key, type) {
   fetch('/edit-data' + '?' + 'key=' + key + "&type=" + type,
       {method: 'POST'}).then(() => {
       getComments()});
 }
 
+/**
+ * Returns formatted string containing the amount of time since parameter time
+ */
 function getTimeSince(time) {
   var currDate = Date.now();
   var commDate = new Date(time);
@@ -271,18 +273,9 @@ function getTimeSince(time) {
   return "";
 }
 
-// deprecated
-async function getID() {
-  var id = getCookie('id');
-  if (id == '') {
-    const response = await fetch('/id');
-    const newID = await response.json();
-    id = newID.propertyMap.id;
-    setCookie('id', id);
-  }
-  return id;
-}
-
+/**
+ * Renders login button/logout dropdown
+ */
 async function getLogin(url) {
   const response = await fetch('/login' + '?' + 'url=' + url);
   const html = await response.text();
@@ -290,6 +283,9 @@ async function getLogin(url) {
   navbarSlot.innerHTML = html;
 }
 
+/**
+ * Renders comments form
+ */
 async function getCommentsForm() {
   const response = await fetch('/comment-form');
   const html = await response.text();
@@ -297,12 +293,17 @@ async function getCommentsForm() {
   comments.innerHTML = html;
 }
 
+/**
+ * Location that contains a set of coordinates and information about it
+ */
 function Location(loc, content) {
   this.loc = loc;
   this.content = content;
 }
 
-/** Creates a map and adds it to the page. */
+/**
+ * Creates a map of locations
+ */
 function createMap() {
   // lay out all the locations
   var locArray = [];
