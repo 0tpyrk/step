@@ -151,7 +151,8 @@ async function getComments() {
     // add space between name and house flag
     if (comm.house != '') headerElement.appendChild(document.createTextNode(' '));
     headerElement.appendChild(createHouseElement(comm.house));
-    headerElement.appendChild(document.createTextNode(', ' + getTimeSince(comm.timestamp)));
+    headerElement.appendChild(document.createTextNode(', ' + 
+        getTimeSince(comm.timestamp)));
     liElement.appendChild(headerElement);
 
     const likesElement = createLikesButtons(comm);
@@ -213,17 +214,26 @@ function createHouseElement(houseInput) {
   return houseElement;
 }
 
+/**
+ * Deletes all comments
+ */
 async function deleteComments() {
   const response = await fetch('/delete-data', {method: 'POST'});
   getComments();
 }
 
+/**
+ * Edits the data of a comment (currently likes or dislikes)
+ */
 function editComment(key, type) {
   fetch('/edit-data' + '?' + 'key=' + key + "&type=" + type,
       {method: 'POST'}).then(() => {
       getComments()});
 }
 
+/**
+ * Returns formatted string containing the amount of time since parameter time
+ */
 function getTimeSince(time) {
   var currDate = Date.now();
   var commDate = new Date(time);
@@ -263,6 +273,9 @@ function getTimeSince(time) {
   return "";
 }
 
+/**
+ * Renders login button/logout dropdown
+ */
 async function getLogin(url) {
   const response = await fetch('/login' + '?' + 'url=' + url);
   const html = await response.text();
@@ -270,6 +283,9 @@ async function getLogin(url) {
   navbarSlot.innerHTML = html;
 }
 
+/**
+ * Renders comments form
+ */
 async function getCommentsForm() {
   const response = await fetch('/comment-form');
   const html = await response.text();
@@ -277,12 +293,17 @@ async function getCommentsForm() {
   comments.innerHTML = html;
 }
 
+/**
+ * Location that contains a set of coordinates and information about it
+ */
 function Location(loc, content) {
   this.loc = loc;
   this.content = content;
 }
 
-/** Creates a map and adds it to the page. */
+/**
+ * Creates a map of locations
+ */
 function createMap() {
   // lay out all the locations
   var locArray = [];
