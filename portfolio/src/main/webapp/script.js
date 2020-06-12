@@ -71,17 +71,6 @@ function getCookie(cname) {
 }
 
 /**
- * Updates navbar with house based off cookie
- * DEPRECATED
- */
-function checkCookie() {
-  var house = toStringHouse(getCookie("house"));
-  var elements = document.getElementsByClassName("house-navbar");
-  elements[0].id = house.toLowerCase();
-  elements[0].innerText = house;
-}
-
-/**
  * Updates navbar with house based off datastore
  */
 async function getHouse() {
@@ -133,7 +122,6 @@ form.addEventListener("submit", function(event) {
     output = entry[1];
   };
 
-  //setCookie("house", output);
   setHouse(output);
 
   // print message
@@ -141,7 +129,6 @@ form.addEventListener("submit", function(event) {
   houseContainer.innerText = "You are a " + toStringHouse(output) + "!";
   
   // update navbar
-  //checkCookie();
   getHouse();
 
   event.preventDefault();
@@ -274,18 +261,6 @@ function getTimeSince(time) {
   }
 
   return "";
-}
-
-// deprecated
-async function getID() {
-  var id = getCookie('id');
-  if (id == '') {
-    const response = await fetch('/id');
-    const newID = await response.json();
-    id = newID.propertyMap.id;
-    setCookie('id', id);
-  }
-  return id;
 }
 
 async function getLogin(url) {
