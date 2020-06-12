@@ -75,7 +75,6 @@ public class DataServlet extends HttpServlet {
         logger.warning("Could not convert Entity's ID to long"); 
       }
 
-      String userNickname = entity.getProperty("user").toString();
       String text = entity.getProperty("text").toString();
 
       input = entity.getProperty("timestamp");
@@ -104,13 +103,12 @@ public class DataServlet extends HttpServlet {
       
       Comment comment = new Comment();
       comment.setID(id);
-      comment.setUser(userNickname);
       comment.setText(text);
       comment.setTimestamp(timestamp);
       comment.setLikes(likes);
       comment.setDislikes(dislikes);
 
-      // set house for comment
+      // set house and nickname for comment
       String userID = entity.getProperty("userID").toString();
       FilterPredicate filter = new FilterPredicate("id", 
           Query.FilterOperator.EQUAL, userID);
@@ -129,6 +127,16 @@ public class DataServlet extends HttpServlet {
         }
 
         comment.setHouse(house);
+
+        input = user.getProperty("nickname");
+        String nick = "";
+        if (input instanceof String) {
+          nick = input.toString();
+        } else {
+          logger.warning("Could not convert User's nickname to String"); 
+        }
+
+        comment.setUser(nick);
       }
       
       comments.add(comment);

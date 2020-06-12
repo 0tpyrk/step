@@ -160,7 +160,9 @@ async function getComments() {
     const liElement = document.createElement('li');
 
     const headerElement = document.createElement('div');
-    headerElement.innerHTML = comm.user.bold() + ' ';
+    headerElement.innerHTML = comm.user.bold();
+    // add space between name and house flag
+    if (comm.house != '') headerElement.appendChild(document.createTextNode(' '));
     headerElement.appendChild(createHouseElement(comm.house));
     headerElement.appendChild(document.createTextNode(', ' + getTimeSince(comm.timestamp)));
     liElement.appendChild(headerElement);
@@ -216,8 +218,11 @@ function createLikesButtons(comm) {
 function createHouseElement(houseInput) {
   var house = toStringHouse(houseInput);
   var houseElement = document.createElement('a');
-  houseElement.id = house.toLowerCase();
-  houseElement.innerHTML = '&nbsp;&nbsp;' + house[0] + '&nbsp;&nbsp;';
+  if (house != '') {
+    houseElement.id = house.toLowerCase();
+    houseElement.innerHTML = '&nbsp;&nbsp;' + house[0] + '&nbsp;&nbsp;';
+  }
+  
   return houseElement;
 }
 
