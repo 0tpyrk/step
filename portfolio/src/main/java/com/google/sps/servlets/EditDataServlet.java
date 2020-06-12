@@ -92,30 +92,59 @@ public class EditDataServlet extends HttpServlet {
             logger.warning("Could not convert User's likes list to ArrayList<Long>"); 
           }
 
-          // check to make sure user's list of liked comments 
-          // doesn't have this comment inside of it
-          if (!userLikes.contains(commID)) {
+          ArrayList<Long> userDislikes = null;
+          Object objUserDislikes = user.getProperty("dislikes");
+          if (objUserDislikes instanceof ArrayList) {
+            userDislikes = (ArrayList<Long>) objUserDislikes;
+          } else {
+            logger.warning("Could not convert User's dislikes list to ArrayList<Long>"); 
+          }
           
-            if (type.equals("like")) {
+          if (type.equals("like")) {
+            if (userLikes.contains(commID)) {
+              // unlike
+              Object likes = comment.getProperty("likes");
+              if (likes instanceof Long) {
+                comment.setProperty("likes", ((long) likes) - 1);
+              } else {
+                logger.warning("Could not convert comment's likes to long"); 
+              }
+              userLikes.remove(commID);
+            } else if (!userDislikes.contains(commID)) {
+              // like
               Object likes = comment.getProperty("likes");
               if (likes instanceof Long) {
                 comment.setProperty("likes", ((long) likes) + 1);
               } else {
                 logger.warning("Could not convert comment's likes to long"); 
               }
-            } else if (type.equals("dislike")) {
+              userLikes.add(commID);
+            }
+          } else if (type.equals("dislike")) {
+            if (userDislikes.contains(commID)) {
+              // undislike
+              Object dislikes = comment.getProperty("dislikes");
+              if (dislikes instanceof Long) {
+                comment.setProperty("dislikes", ((long) dislikes) - 1);
+              } else {
+                logger.warning("Could not convert comment's dislikes to long"); 
+              }
+              userDislikes.remove(commID);
+            } else if (!userLikes.contains(commID)) {
+              // dislike
               Object dislikes = comment.getProperty("dislikes");
               if (dislikes instanceof Long) {
                 comment.setProperty("dislikes", ((long) dislikes) + 1);
               } else {
                 logger.warning("Could not convert comment's dislikes to long"); 
               }
-            }
-            userLikes.add(commID);
-            user.setProperty("likes", userLikes);
-            datastore.put(user);
-            datastore.put(comment);
+              userDislikes.add(commID);
+            } 
           }
+          user.setProperty("likes", userLikes);
+          user.setProperty("dislikes", userDislikes);
+          datastore.put(user);
+          datastore.put(comment);
         }
       }
     }

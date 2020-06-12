@@ -95,6 +95,7 @@ nav .active {
   display: none;
   min-width: 160px;
   position: absolute;
+  right: 0;
   z-index: 0.5;
 }
 

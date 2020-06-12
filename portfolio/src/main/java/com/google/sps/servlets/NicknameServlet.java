@@ -19,6 +19,8 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import java.io.IOException;
@@ -29,6 +31,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 @WebServlet("/nickname")
 public class NicknameServlet extends HttpServlet {
@@ -73,26 +77,48 @@ public class NicknameServlet extends HttpServlet {
       return;
     }
 
-    String nickname = request.getParameter("nickname");
-    String id = userService.getCurrentUser().getUserId();
+    String userID = userService.getCurrentUser().getUserId();
+    
+    FilterPredicate filter = new FilterPredicate("id", 
+        Query.FilterOperator.EQUAL, userID);
+    Query userQuery = new Query("User");
+    userQuery.setFilter(filter);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Entity entity = new Entity("User", id);
 
-    List<Long> list = new ArrayList<Long>();
-    // adding intial value to the list, otherwise entity draws NullPointerException
-    // later when taken out of the datastore
-    long initVal = 0;
-    list.add(initVal);
+    // PreparedQuery that has the user who liked the comment inside it
+    PreparedQuery userResults = datastore.prepare(userQuery);
 
-    entity.setProperty("id", id);
-    entity.setProperty("nickname", nickname);
-    entity.setUnindexedProperty("likes", list);
-    entity.setProperty("house", "");
-    // The put() function automatically inserts new data or 
-    // updates existing data based on ID
-    datastore.put(entity);
+    // Create Logger for warning reporting
+    Logger logger = Logger.getLogger(HouseServlet.class.getName());
+    logger.setLevel(Level.WARNING); 
+  
+    Entity user = userResults.asSingleEntity();
 
+    if (user != null) {
+      user.setProperty("nickname", request.getParameter("nickname"));
+      datastore.put(user);
+    } else {
+      String newNickname = request.getParameter("nickname");
+      String id = userService.getCurrentUser().getUserId();
+
+      Entity entity = new Entity("User", id);
+
+      List<Long> list = new ArrayList<Long>();
+      // adding intial value to the list, otherwise entity draws NullPointerException
+      // later when taken out of the datastore
+      long initVal = 0;
+      list.add(initVal);
+
+      entity.setProperty("id", id);
+      entity.setProperty("nickname", newNickname);
+      entity.setUnindexedProperty("likes", list);
+      entity.setUnindexedProperty("dislikes", list);
+      entity.setProperty("house", "");
+      // The put() function automatically inserts new data or 
+      // updates existing data based on ID
+      datastore.put(entity);
+    }
     String nextURL = request.getParameter("url");
     response.sendRedirect(String.format("/%1$s.html" , nextURL));
   }

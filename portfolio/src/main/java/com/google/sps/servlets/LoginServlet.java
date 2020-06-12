@@ -61,6 +61,7 @@ public class LoginServlet extends HttpServlet {
       out.println(String.format("<button class=\"dropbtn\">%1$s</button>",
           user));
       out.println("<div class=\"dropdown-content\">");
+      out.println(String.format("<a href=\"/nickname?url=%1$s\">Change Nickname</a>", nextURL));
       out.println(String.format("<a href=\"%1$s\">Logout</a>", logoutUrl));
       out.println("</div>");
 
