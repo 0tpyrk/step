@@ -35,51 +35,32 @@ public final class FindMeetingQuery {
         }
       }
     }
-
+    
     List<TimeRange> finalTimes = Arrays.asList();
     finalTimes = new ArrayList<>(finalTimes);
-    List<Event> sortedRelevantEvents = new ArrayList<Event>();
-    // sort personRelevantEvents
-    while (!personRelevantEvents.isEmpty()) {
-      Event e = personRelevantEvents.get(0);
-      for (int i = 0; i < personRelevantEvents.size(); i++) {
-        // if event starts earlier than the earliest found so far
-        if (TimeRange.ORDER_BY_START.compare(e.getWhen(), personRelevantEvents.get(i).getWhen()) > 0) {
-          e = personRelevantEvents.get(i);
-        // if equal starts, compare ending times
-        } else if (TimeRange.ORDER_BY_START.compare(e.getWhen(), personRelevantEvents.get(i).getWhen()) == 0) {
-          if (TimeRange.ORDER_BY_END.compare(e.getWhen(), personRelevantEvents.get(i).getWhen()) > 0) {
-            e = personRelevantEvents.get(i);
-          }
-        }
-      }
-      sortedRelevantEvents.add(e);
-      personRelevantEvents.remove(e);
-    }
 
+    personRelevantEvents.sort(Event.ORDER_BY_START);
+    
     // remove events that are contained within others
     List<Event> toDelete = new ArrayList<Event>();
-    for (int i = 0; i < sortedRelevantEvents.size() - 1; i++) {
-      if (sortedRelevantEvents.get(i).getWhen().contains(sortedRelevantEvents.get(i+1).getWhen())) {
-        toDelete.add(sortedRelevantEvents.get(i+1));
+    for (int i = 0; i < personRelevantEvents.size() - 1; i++) {
+      if (personRelevantEvents.get(i).getWhen().contains(personRelevantEvents.get(i+1).getWhen())) {
+        toDelete.add(personRelevantEvents.get(i+1));
       }
     }
     for (Event e : toDelete) {
-      sortedRelevantEvents.remove(e);
+      personRelevantEvents.remove(e);
     }
-
-    // test if sort works
-    System.out.println("Beginning");
-    for (Event e : sortedRelevantEvents) {
-        System.out.println(e.getWhen().start());
-    }
-
+    
+    // beginning of the period we are going to check for meeting availability
     int start = TimeRange.START_OF_DAY;
+    // end of the period we are going to check for meeting availability
     int end;
     int difference;
+    // the amount of time the meeting we're trying to schedule needs
     int duration = (int) request.getDuration();
     // check between events for enough space for the meeting
-    for (Event e : sortedRelevantEvents) {
+    for (Event e : personRelevantEvents) {
       end = e.getWhen().start();
       System.out.println("Checking: " + start + " - " + end);
       difference = end - start;
