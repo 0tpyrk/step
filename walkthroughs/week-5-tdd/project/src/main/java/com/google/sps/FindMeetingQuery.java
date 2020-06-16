@@ -26,11 +26,18 @@ public final class FindMeetingQuery {
     // events that have 1 or more attendees of query event attending them
     List<Event> personRelevantEvents = Arrays.asList();
     personRelevantEvents = new ArrayList<>(personRelevantEvents);
+    List<Event> combinedRelevantEvents = Arrays.asList();
+    combinedRelevantEvents = new ArrayList<>(combinedRelevantEvents);
     // fill personRelevantEvents
     for (Event e : events) {
       for (String p : e.getAttendees()) {
         if (request.getAttendees().contains(p)) {
           personRelevantEvents.add(e);
+          combinedRelevantEvents.add(e);
+          break;
+        }
+        else if (request.getOptionalAttendees().contains(p)) {
+          combinedRelevantEvents.add(e);
           break;
         }
       }
@@ -40,29 +47,57 @@ public final class FindMeetingQuery {
     finalTimes = new ArrayList<>(finalTimes);
 
     personRelevantEvents.sort(Event.ORDER_BY_START);
-    
+    combinedRelevantEvents.sort(Event.ORDER_BY_START);
+
     // remove events that are contained within others
-    List<Event> toDelete = new ArrayList<Event>();
-    for (int i = 0; i < personRelevantEvents.size() - 1; i++) {
-      if (personRelevantEvents.get(i).getWhen().contains(personRelevantEvents.get(i+1).getWhen())) {
-        toDelete.add(personRelevantEvents.get(i+1));
+    List<Event> toDeletePerson = new ArrayList<Event>();
+    for (int i = 0; i < personRelevantEvents.size(); i++) {
+      for (int o = i + 1; o < personRelevantEvents.size(); o++) {
+        if (personRelevantEvents.get(i).getWhen().contains(personRelevantEvents.get(o).getWhen())) {
+          toDeletePerson.add(personRelevantEvents.get(o));
+        }
       }
     }
-    for (Event e : toDelete) {
+    for (Event e : toDeletePerson) {
       personRelevantEvents.remove(e);
     }
+
+    List<Event> toDeleteCombined = new ArrayList<Event>();
+    for (int i = 0; i < combinedRelevantEvents.size(); i++) {
+      for (int o = i + 1; o < combinedRelevantEvents.size(); o++) {
+        if (combinedRelevantEvents.get(i).getWhen().contains(combinedRelevantEvents.get(o).getWhen())) {
+          toDeleteCombined.add(combinedRelevantEvents.get(o));
+        }
+      }
+    }
+    for (Event e : toDeleteCombined) {
+      combinedRelevantEvents.remove(e);
+    }
     
+    finalTimes = findTimes(combinedRelevantEvents, (int) request.getDuration());
+  
+    // if there is no room for meetings with both optional and mandatory attendees
+    if (finalTimes.isEmpty() && !personRelevantEvents.isEmpty()) {
+      finalTimes = findTimes(personRelevantEvents, (int) request.getDuration());
+    }
+
+    return finalTimes;
+  }
+
+  /**
+   * Finds times available for a meeting with a given duration in a list of 
+   */
+  private List<TimeRange> findTimes(List<Event> listOfEvents, int duration) {
+    List<TimeRange> finalTimes = Arrays.asList();
+    finalTimes = new ArrayList<>(finalTimes);
     // beginning of the period we are going to check for meeting availability
     int start = TimeRange.START_OF_DAY;
     // end of the period we are going to check for meeting availability
     int end;
     int difference;
-    // the amount of time the meeting we're trying to schedule needs
-    int duration = (int) request.getDuration();
     // check between events for enough space for the meeting
-    for (Event e : personRelevantEvents) {
+    for (Event e : listOfEvents) {
       end = e.getWhen().start();
-      System.out.println("Checking: " + start + " - " + end);
       difference = end - start;
       if (difference >= duration) {
         finalTimes.add(TimeRange.fromStartDuration(start, difference));
@@ -73,7 +108,7 @@ public final class FindMeetingQuery {
     end = TimeRange.END_OF_DAY;
     difference = end - start;
     if (difference >= duration) finalTimes.add(TimeRange.fromStartEnd(start, end, true));
-    System.out.println(finalTimes);
+
     return finalTimes;
   }
 }
