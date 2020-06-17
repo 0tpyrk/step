@@ -50,29 +50,8 @@ public final class FindMeetingQuery {
     combinedRelevantEvents.sort(Event.ORDER_BY_START);
 
     // remove events that are contained within others
-    List<Event> toDeletePerson = new ArrayList<Event>();
-    for (int i = 0; i < personRelevantEvents.size(); i++) {
-      for (int o = i + 1; o < personRelevantEvents.size(); o++) {
-        if (personRelevantEvents.get(i).getWhen().contains(personRelevantEvents.get(o).getWhen())) {
-          toDeletePerson.add(personRelevantEvents.get(o));
-        }
-      }
-    }
-    for (Event e : toDeletePerson) {
-      personRelevantEvents.remove(e);
-    }
-
-    List<Event> toDeleteCombined = new ArrayList<Event>();
-    for (int i = 0; i < combinedRelevantEvents.size(); i++) {
-      for (int o = i + 1; o < combinedRelevantEvents.size(); o++) {
-        if (combinedRelevantEvents.get(i).getWhen().contains(combinedRelevantEvents.get(o).getWhen())) {
-          toDeleteCombined.add(combinedRelevantEvents.get(o));
-        }
-      }
-    }
-    for (Event e : toDeleteCombined) {
-      combinedRelevantEvents.remove(e);
-    }
+    removeContainedEvents(personRelevantEvents);
+    removeContainedEvents(combinedRelevantEvents);
     
     finalTimes = findTimes(combinedRelevantEvents, (int) request.getDuration());
   
@@ -85,7 +64,24 @@ public final class FindMeetingQuery {
   }
 
   /**
-   * Finds times available for a meeting with a given duration in a list of 
+   * Removes events from a list that are contained within others
+   */
+  private void removeContainedEvents(List<Event> listOfEvents) {
+    List<Event> toDelete = new ArrayList<Event>();
+    for (int i = 0; i < listOfEvents.size(); i++) {
+      for (int o = i + 1; o < listOfEvents.size(); o++) {
+        if (listOfEvents.get(i).getWhen().contains(listOfEvents.get(o).getWhen())) {
+          toDelete.add(listOfEvents.get(o));
+        }
+      }
+    }
+    for (Event e : toDelete) {
+      listOfEvents.remove(e);
+    }
+  }
+
+  /**
+   * Finds times available for a meeting with a given duration in a list of events
    */
   private List<TimeRange> findTimes(List<Event> listOfEvents, int duration) {
     List<TimeRange> finalTimes = Arrays.asList();
